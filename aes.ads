@@ -7,32 +7,31 @@ package AES with
 is
 
    type This_T is tagged limited private;
+   type State_T is array (1 .. 4, 1 .. 4) of T;
 
    type Key_Length_T is (KL128, KL192, KL256);
    for Key_Length_T use (128, 192, 256);
 
-   type State_T is array (1 .. 4, 1 .. 4) of T;
-
    generic
       Key_Length : Key_Length_T;
    package EBC is
-      procedure Encrypt (This : This_T);
-      procedure Decrypt (This : This_T);
+      procedure Encrypt (This : This_T; Buffer : T_Array);
+      procedure Decrypt (This : This_T; Buffer : T_Array);
    end EBC;
 
    generic
       Key_Length : Key_Length_T;
    package CBC is
-      procedure Encrypt (This : This_T);
-      procedure Decrypt (This : This_T);
+      procedure Encrypt (This : This_T; Buffer : T_Array);
+      procedure Decrypt (This : This_T; Buffer : T_Array);
    end CBC;
 
    generic
       Key_Length : Key_Length_T;
    package CTR is
-      procedure Xcrypt (This : This_T);
-      procedure Encrypt (This : This_T) renames Xcrypt;
-      procedure Decrypt (This : This_T) renames Xcrypt;
+      procedure Xcrypt (This : This_T; Buffer : T_Array);
+      procedure Encrypt (This : This_T; Buffer : T_Array) renames Xcrypt;
+      procedure Decrypt (This : This_T; Buffer : T_Array) renames Xcrypt;
    end CTR;
 
 private

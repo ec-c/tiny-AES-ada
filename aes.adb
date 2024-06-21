@@ -2,12 +2,12 @@ package body AES is
 
    package body EBC is
 
-      procedure Encrypt (This : This_T) is
+      procedure Encrypt (This : This_T; Buffer : T_Array) is
       begin
          null;
       end Encrypt;
 
-      procedure Decrypt (This : This_T) is
+      procedure Decrypt (This : This_T; Buffer : T_Array) is
       begin
          null;
       end Decrypt;
@@ -16,12 +16,12 @@ package body AES is
 
    package body CBC is
 
-      procedure Encrypt (This : This_T) is
+      procedure Encrypt (This : This_T; Buffer : T_Array) is
       begin
          null;
       end Encrypt;
 
-      procedure Decrypt (This : This_T) is
+      procedure Decrypt (This : This_T; Buffer : T_Array) is
       begin
          null;
       end Decrypt;
@@ -30,7 +30,7 @@ package body AES is
 
    package body CTR is
 
-      procedure Xcrypt (This : This_T) is
+      procedure Xcrypt (This : This_T; Buffer : T_Array) is
       begin
          null;
       end Xcrypt;
