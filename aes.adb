@@ -37,6 +37,24 @@ package body AES is
 
    end CTR;
 
+   function Number_Of_Rounds (Key_Length : Key_Length_T) return Positive is
+   begin
+      case Key_Length is
+         when KL128 => return 10;
+         when KL192 => return 12;
+         when KL256 => return 14;
+      end case;
+   end Number_Of_Rounds;
+
+   function Number_Of_Words (Key_Length : Key_Length_T) return Positive is
+   begin
+      case Key_Length is
+         when KL128 => return 4;
+         when KL192 => return 6;
+         when KL256 => return 8;
+      end case;
+   end Number_Of_Words;
+
    procedure Cipher (This : This_T; Round_Key : Positive) is
    begin
       null;

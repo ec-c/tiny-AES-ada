@@ -41,6 +41,12 @@ private
          State : State_T;
       end record;
 
+   function Number_Of_Rounds (Key_Length : Key_Length_T) return Positive;
+   pragma Inline (Number_Of_Rounds);
+
+   function Number_Of_Words (Key_Length : Key_Length_T) return Positive;
+   pragma Inline (Number_Of_Words);
+
    procedure Cipher (This : This_T; Round_Key : Positive);
    procedure Add_Round_Key (This : This_T);
    procedure Sub_Bytes (This : This_T);
