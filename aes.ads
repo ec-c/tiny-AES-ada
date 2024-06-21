@@ -15,7 +15,23 @@ is
       Key_Length : Key_Length_T;
    package EBC is
       procedure Encrypt (This : State);
+      procedure Decrypt (This : State);
    end EBC;
+
+   generic
+      Key_Length : Key_Length_T;
+   package CBC is
+      procedure Encrypt (This : State);
+      procedure Decrypt (This : State);
+   end CBC;
+
+   generic
+      Key_Length : Key_Length_T;
+   package CTR is
+      procedure Xcrypt (This : State);
+      procedure Encrypt (This : State) renames Xcrypt;
+      procedure Decrypt (This : State) renames Xcrypt;
+   end CTR;
 
 private
 
