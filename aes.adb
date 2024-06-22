@@ -7,7 +7,7 @@ package body AES is
       overriding
       procedure Initialize (This : in out Buffer) is
       begin
-         This.Round_Key := Key_Expansion (Key);
+         This.Round_Keys := Key_Expansion (Key);
       end Initialize;
 
       function Xcrypt (This : in out Buffer; Buffer : T_Array) return T_Array is
@@ -24,6 +24,10 @@ package body AES is
    function Key_Expansion (Key : T_Array) return Round_Key_Array is
       Result : Round_Key_Array;
    begin
+      for I in Round_Key_Array'Range (1) loop
+         null;
+      end loop;
+
       return Result;
    end Key_Expansion;
 
@@ -32,8 +36,8 @@ package body AES is
    function Sub_Bytes (State : State_Array) return State_Array is
       Result : State_Array := State;
    begin
-      for I in State'Range (1) loop
-         for J in State'Range (2) loop
+      for I in State_Array'Range (1) loop
+         for J in State_Array'Range (2) loop
             Result (I, J) := SBox (T_Index (State (I, J)));
          end loop;
       end loop;

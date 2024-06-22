@@ -1,4 +1,5 @@
 with Ada.Finalization;
+with Interfaces;
 
 generic
    type T is mod <>;
@@ -27,10 +28,13 @@ is
       function Xcrypt (This : in out Buffer; Buffer : T_Array) return T_Array;
    private
 
+      subtype u32 is Interfaces.Unsigned_32 range Interfaces.Unsigned_32'Range;
+      type Words is array (Positive range <>) of aliased u32;
+
       type Buffer is new Ada.Finalization.Limited_Controlled with
          record
-            Round_Key : Round_Key_Array;
-            State     : State_Array;
+            Round_Keys : Round_Key_Array;
+            State      : State_Array;
          end record;
 
    end CTR;
@@ -38,7 +42,7 @@ is
 private
 
    --  AES128 -> 10 rounds * 16 bytes = 128 bit
-   type Round_Key_Array is array (1 .. 10, 1 .. 16) of T;
+   type Round_Key_Array is array (0 .. 10, 1 .. 16) of T;
 
    type State_Array is array (1 .. 4, 1 .. 4) of T;
 
