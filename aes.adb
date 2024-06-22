@@ -28,11 +28,15 @@ package body AES is
 
    end CBC;
 
+   --  Symmetrical operation: same procedure for encrypting as for decrypting.
+   --  Note any IV/nonce should never be reused with the same key.
    package body CTR is
 
       procedure Xcrypt (This : This_T; Buffer : T_Array) is
       begin
-         null;
+         for Buf in Buffer'Range loop
+            null;
+         end loop;
       end Xcrypt;
 
    end CTR;
