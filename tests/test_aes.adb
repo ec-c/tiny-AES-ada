@@ -13,7 +13,8 @@ package body Test_AES is
       Ahven.Framework.Add_Test_Routine (Test, Test_AES128_Encrypt_CTR'Access, "AES128 Encrypt CTR");
    end Initialize;
 
---   package AES128 is new AES (128, u8, Positive, Bytes, Interfaces.Shift_Left, Interfaces.Shift_Right);
+   package AES128 is new AES (u8, Positive, Bytes, Interfaces.Shift_Left, Interfaces.Shift_Right);
+   package AES128_CTR is new AES128.CTR;
 
    procedure Test_AES128_Encrypt_CTR is
       Key : Bytes := [16#2b#, 16#7e#, 16#15#, 16#16#, 16#28#, 16#ae#, 16#d2#, 16#a6#,
@@ -28,17 +29,18 @@ package body Test_AES is
                         16#13#, 16#c2#, 16#dd#, 16#08#, 16#45#, 16#79#, 16#41#, 16#a6#];
       Init_Vector : Bytes := [16#f0#, 16#f1#, 16#f2#, 16#f3#, 16#f4#, 16#f5#, 16#f6#, 16#f7#,
                               16#f8#, 16#f9#, 16#fa#, 16#fb#, 16#fc#, 16#fd#, 16#fe#, 16#ff#];
-      Output : Bytes := [16#6b#, 16#c1#, 16#be#, 16#e2#, 16#2e#, 16#40#, 16#9f#, 16#96#,
-                         16#e9#, 16#3d#, 16#7e#, 16#11#, 16#73#, 16#93#, 16#17#, 16#2a#,
-                         16#ae#, 16#2d#, 16#8a#, 16#57#, 16#1e#, 16#03#, 16#ac#, 16#9c#,
-                         16#9e#, 16#b7#, 16#6f#, 16#ac#, 16#45#, 16#af#, 16#8e#, 16#51#,
-                         16#30#, 16#c8#, 16#1c#, 16#46#, 16#a3#, 16#5c#, 16#e4#, 16#11#,
-                         16#e5#, 16#fb#, 16#c1#, 16#19#, 16#1a#, 16#0a#, 16#52#, 16#ef#,
-                         16#f6#, 16#9f#, 16#24#, 16#45#, 16#df#, 16#4f#, 16#9b#, 16#17#,
-                         16#ad#, 16#2b#, 16#41#, 16#7b#, 16#e6#, 16#6c#, 16#37#, 16#10#];
-      --  Result : Bytes := AES128.CTR.Encrypt (Input);
+      Expected : Bytes := [16#6b#, 16#c1#, 16#be#, 16#e2#, 16#2e#, 16#40#, 16#9f#, 16#96#,
+                           16#e9#, 16#3d#, 16#7e#, 16#11#, 16#73#, 16#93#, 16#17#, 16#2a#,
+                           16#ae#, 16#2d#, 16#8a#, 16#57#, 16#1e#, 16#03#, 16#ac#, 16#9c#,
+                           16#9e#, 16#b7#, 16#6f#, 16#ac#, 16#45#, 16#af#, 16#8e#, 16#51#,
+                           16#30#, 16#c8#, 16#1c#, 16#46#, 16#a3#, 16#5c#, 16#e4#, 16#11#,
+                           16#e5#, 16#fb#, 16#c1#, 16#19#, 16#1a#, 16#0a#, 16#52#, 16#ef#,
+                           16#f6#, 16#9f#, 16#24#, 16#45#, 16#df#, 16#4f#, 16#9b#, 16#17#,
+                           16#ad#, 16#2b#, 16#41#, 16#7b#, 16#e6#, 16#6c#, 16#37#, 16#10#];
+      Buf1 : AES128_CTR.Buffer;
+      Result : Bytes := Buf1.Xcrypt (Input);
    begin
-      Assert (1 = 2, "fail");
+      Assert (Result = Expected, "fail");
    end Test_AES128_Encrypt_CTR;
 
 end Test_AES;

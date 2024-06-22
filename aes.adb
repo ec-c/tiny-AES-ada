@@ -4,11 +4,13 @@ package body AES is
    --  Note any IV/nonce should never be reused with the same key.
    package body CTR is
 
-      procedure Xcrypt (This : This1_T; Buffer : T_Array) is
+      function Xcrypt (This : Buffer; Buffer : T_Array) return T_Array is
       begin
          for Buf in Buffer'Range loop
             null;
          end loop;
+
+         return [];
       end Xcrypt;
 
    end CTR;
