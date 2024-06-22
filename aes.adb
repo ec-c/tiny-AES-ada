@@ -47,9 +47,31 @@ package body AES is
       end case;
    end Get_Key_Expansion_Size;
 
+   --  Cipher is the main procedure that encrypts the plaintext.
    procedure Cipher (This : in out This_T; Round_Key : T) is
+      Number_Of_Rounds : Positive;
    begin
+      --  Add the First round key to the state before starting the rounds.
       This.Add_Round_Key (0, Round_Key);
+
+      case Key_Length is
+         when 128 => Number_Of_Rounds := 10;
+         when 192 => Number_Of_Rounds := 12;
+         when 256 => Number_Of_Rounds := 14;
+         when others => raise Unsupported_AES_Key_Length;
+      end case;
+
+      for Round in 1 .. Number_Of_Rounds - 1 loop
+         This.Sub_Bytes;
+         This.Shift_Rows;
+         This.Mix_Columns;
+         This.Add_Round_Key (Round, Round_Key);
+      end loop;
+
+      --  Last round
+      This.Sub_Bytes;
+      This.Shift_Rows;
+      This.Add_Round_Key (Number_Of_Rounds, Round_Key);
    end Cipher;
 
    procedure Add_Round_Key (This : in out This_T; Round : Natural; Round_Key : T) is
