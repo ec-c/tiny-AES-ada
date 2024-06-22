@@ -1,5 +1,3 @@
-with Interfaces;
-
 with Ahven;
 
 package body Test_AES is
@@ -14,8 +12,6 @@ package body Test_AES is
    end Initialize;
 
    procedure Test_1 is
-      subtype u8 is Interfaces.Unsigned_8 range Interfaces.Unsigned_8'Range;
-      type Bytes is array (Positive range <>) of aliased u8;
    begin
       Assert (1 = 2, "fail");
    end Test_1;
