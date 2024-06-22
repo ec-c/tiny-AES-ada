@@ -55,10 +55,10 @@ private
       16#8c#, 16#a1#, 16#89#, 16#0d#, 16#bf#, 16#e6#, 16#42#, 16#68#, 16#41#, 16#99#, 16#2d#, 16#0f#, 16#b0#, 16#54#, 16#bb#, 16#16#
    ];
 
-   procedure Cipher (This : This_T; Round_Key : Positive);
-   procedure Add_Round_Key (This : This_T);
-   procedure Sub_Bytes (This : This_T);
-   procedure Shift_Rows (This : This_T);
+   procedure Cipher (This : This_T; Round_Key : T);
+   procedure Add_Round_Key (This : This_T; Round : Positive; Round_Key : T);
+   procedure Sub_Bytes (This : in out This_T);
+   procedure Shift_Rows (This : in out This_T);
    procedure Mix_Columns (This : This_T);
 
    pragma Precondition (Key_Length = 128 or else Key_Length = 192 or else Key_Length = 256);
