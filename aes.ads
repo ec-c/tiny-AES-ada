@@ -1,5 +1,5 @@
 generic
-   Key_Length : Positive; -- supports 128, 192 or 256 only
+   Key_Length : Positive; -- Supports 128, 192 or 256 only.
 
    type T is mod <>;
    type T_Index is range <>;
@@ -10,6 +10,8 @@ generic
 package AES with
    SPARK_Mode
 is
+
+   Unsupported_AES_Key_Length : exception;
 
    type This_T is tagged limited private;
    type State_T is private;
@@ -32,11 +34,16 @@ is
 
 private
 
+   --  TODO: get rid of this function?
+   function Get_Key_Expansion_Size (Key_Length : Positive) return T_Index;
+   pragma Inline (Get_Key_Expansion_Size);
+
    type State_T is array (1 .. 4, 1 .. 4) of T;
 
    type This_T is
       tagged limited record
-         State : State_T;
+         Round_Key : T_Array (1 .. Get_Key_Expansion_Size (Key_Length));
+         State     : State_T;
       end record;
 
    Forward_SBox : constant T_Array (1 .. 256) := [
@@ -59,8 +66,8 @@ private
       16#8c#, 16#a1#, 16#89#, 16#0d#, 16#bf#, 16#e6#, 16#42#, 16#68#, 16#41#, 16#99#, 16#2d#, 16#0f#, 16#b0#, 16#54#, 16#bb#, 16#16#
    ];
 
-   procedure Cipher (This : This_T; Round_Key : T);
-   procedure Add_Round_Key (This : This_T; Round : Positive; Round_Key : T);
+   procedure Cipher (This : in out This_T; Round_Key : T);
+   procedure Add_Round_Key (This : in out This_T; Round : Natural; Round_Key : T);
    procedure Sub_Bytes (This : in out This_T);
    procedure Shift_Rows (This : in out This_T);
    procedure Mix_Columns (This : in out This_T);

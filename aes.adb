@@ -37,14 +37,28 @@ package body AES is
 
    end CTR;
 
-   procedure Cipher (This : This_T; Round_Key : T) is
+   function Get_Key_Expansion_Size (Key_Length : Positive) return T_Index is
    begin
-      This.Add_Round_Key (1, Round_Key);
+      case Key_Length is
+         when 128 => return 176;
+         when 192 => return 208;
+         when 256 => return 240;
+         when others => raise Unsupported_AES_Key_Length;
+      end case;
+   end Get_Key_Expansion_Size;
+
+   procedure Cipher (This : in out This_T; Round_Key : T) is
+   begin
+      This.Add_Round_Key (0, Round_Key);
    end Cipher;
 
-   procedure Add_Round_Key (This : This_T; Round : Positive; Round_Key : T) is
+   procedure Add_Round_Key (This : in out This_T; Round : Natural; Round_Key : T) is
    begin
-      null;
+      for I in This.State'Range (1) loop
+         for J in This.State'Range (2) loop
+            This.State (I, J) := @ xor This.Round_Key (T_Index (Round * 16 + (I * 4) + J));
+         end loop;
+      end loop;
    end Add_Round_Key;
 
    --  The Sub_Bytes procedure substitutes the values in the state matrix with
