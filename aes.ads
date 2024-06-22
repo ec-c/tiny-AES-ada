@@ -9,6 +9,7 @@ package AES with
    Pure
 is
 
+   type Round_Key_Array is private;
    type State_Array is private;
 
    generic
@@ -23,13 +24,16 @@ is
 
       type Buffer is
          tagged limited record
-            Round_Key : T_Array (1 .. 16 * 11); -- AES128 -> 16 bytes = 128 bit * 11 rounds
+            Round_Key : Round_Key_Array;
             State     : State_Array;
          end record;
 
    end CTR;
 
 private
+
+   -- AES128 -> 16 bytes = 128 bit * 11 rounds
+   type Round_Key_Array is array (1 .. 11, 1 .. 16) of T;
 
    type State_Array is array (1 .. 4, 1 .. 4) of T;
 
