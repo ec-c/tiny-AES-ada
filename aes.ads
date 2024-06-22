@@ -13,7 +13,7 @@ is
    type State_Array is private;
 
    generic
-      Nonce : T_Array;
+      Init_Vector : T_Array;
    package CTR with
       SPARK_Mode
    is
