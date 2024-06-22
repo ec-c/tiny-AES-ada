@@ -1,8 +1,12 @@
 generic
    Key_Length : Positive; -- supports 128, 192 or 256 only
+
    type T is mod <>;
    type T_Index is range <>;
    type T_Array is array (T_Index range <>) of T;
+
+   with function Shift_Left (Value : T; Amount : Natural) return T;
+   with function Shift_Right (Value : T; Amount : Natural) return T;
 package AES with
    SPARK_Mode
 is
@@ -59,7 +63,7 @@ private
    procedure Add_Round_Key (This : This_T; Round : Positive; Round_Key : T);
    procedure Sub_Bytes (This : in out This_T);
    procedure Shift_Rows (This : in out This_T);
-   procedure Mix_Columns (This : This_T);
+   procedure Mix_Columns (This : in out This_T);
 
    pragma Precondition (Key_Length = 128 or else Key_Length = 192 or else Key_Length = 256);
 

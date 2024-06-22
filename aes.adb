@@ -88,9 +88,32 @@ package body AES is
       This.State (2, 4) := Temp;
    end Shift_Rows;
 
-   procedure Mix_Columns (This : This_T) is
+   --  The Mix_Columns procedure mixes the columns of the state matrix.
+   --  TODO: rename variables
+   procedure Mix_Columns (This : in out This_T) is
+      function Xtime (X : T) return T is
+         (Shift_Left (X, 1) xor ((Shift_Right (X, 7) and 1) * 16#1b#));
+      pragma Inline (Xtime);
+
+      Tmp, Tm, T1 : T;
    begin
-      null;
+      for I in 1 .. 4 loop
+         T1 := This.State (I, 1);
+         Tmp := This.State (I, 1) xor This.State (I, 2) xor This.State (I, 3) xor This.State (I, 4);
+         Tm := This.State (I, 1) xor This.State (I, 2);
+
+         Tm := This.State (I, 2) xor This.State (I, 3);
+         Tm := Xtime (Tm);
+         This.State (I, 2) := @ xor Tm xor Tmp;
+
+         Tm := This.State (I, 3) xor This.State (I, 4);
+         Tm := Xtime (Tm);
+         This.State (I, 3) := @ xor Tm xor Tmp;
+
+         Tm := This.State (I, 4) xor T1;
+         Tm := Xtime (Tm);
+         This.State (I, 4) := @ xor Tm xor Tmp;
+      end loop;
    end Mix_Columns;
 
 end AES;
