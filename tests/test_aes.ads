@@ -2,8 +2,6 @@ with Interfaces;
 
 with Ahven.Framework;
 
-with AES;
-
 package Test_AES is
 
    type Test_T is new Ahven.Framework.Test_Case with null record;
@@ -14,6 +12,6 @@ package Test_AES is
    overriding
    procedure Initialize (Test : in out Test_T);
 
-   procedure Test_1;
+   procedure Test_AES128_Encrypt_CTR;
 
 end Test_AES;
