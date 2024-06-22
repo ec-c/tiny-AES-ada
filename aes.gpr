@@ -1,3 +1,5 @@
+with "ahven-2.8/gnat/ahven.gpr";
+
 project AES is
    Ada_Compiler_Switches := External_As_List ("ADAFLAGS", " ");
    Ada_Compiler_Switches := Ada_Compiler_Switches & (
@@ -40,7 +42,7 @@ project AES is
    for Exec_Dir use ".";
    for Main use ("tester.adb");
    for Object_Dir use "." & Build_Profile;
-   for Source_Dirs use (".");
+   for Source_Dirs use (".", "tests");
 
    for Create_Missing_Dirs use "True";
 
