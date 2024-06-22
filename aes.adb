@@ -13,16 +13,6 @@ package body AES is
 
    end CTR;
 
-   function Get_Key_Expansion_Size (Key_Length : Positive) return T_Index is
-   begin
-      case Key_Length is
-         when 128 => return 176;
-         when 192 => return 208;
-         when 256 => return 240;
-         when others => raise Unsupported_AES_Key_Length;
-      end case;
-   end Get_Key_Expansion_Size;
-
    --  Cipher is the main procedure that encrypts the plaintext.
    procedure Cipher (This : in out This_T; Round_Key : T) is
       Number_Of_Rounds : Positive;
@@ -30,14 +20,7 @@ package body AES is
       --  Add the First round key to the state before starting the rounds.
       This.Add_Round_Key (0, Round_Key);
 
-      case Key_Length is
-         when 128 => Number_Of_Rounds := 10;
-         when 192 => Number_Of_Rounds := 12;
-         when 256 => Number_Of_Rounds := 14;
-         when others => raise Unsupported_AES_Key_Length;
-      end case;
-
-      for Round in 1 .. Number_Of_Rounds - 1 loop
+      for Round in 1 .. 9 loop -- aes128: 10 rounds
          This.Sub_Bytes;
          This.Shift_Rows;
          This.Mix_Columns;

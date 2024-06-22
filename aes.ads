@@ -1,6 +1,4 @@
 generic
-   Key_Length : Positive; -- Supports 128, 192 or 256 only.
-
    type T is mod <>;
    type T_Index is range <>;
    type T_Array is array (T_Index range <>) of T;
@@ -11,9 +9,12 @@ package AES with
    SPARK_Mode
 is
 
+   Key_Length : Positive := 128;
+
    Unsupported_AES_Key_Length : exception;
 
    type This_T is tagged limited private;
+
    type State_T is private;
 
    package CTR is
@@ -24,15 +25,11 @@ is
 
 private
 
-   --  TODO: get rid of this function?
-   function Get_Key_Expansion_Size (Key_Length : Positive) return T_Index;
-   pragma Inline (Get_Key_Expansion_Size);
-
    type State_T is array (1 .. 4, 1 .. 4) of T;
 
    type This_T is
       tagged limited record
-         Round_Key : T_Array (1 .. Get_Key_Expansion_Size (Key_Length));
+         Round_Key : T_Array (1 .. 176); -- AES128 -> 176
          State     : State_T;
       end record;
 
@@ -61,7 +58,5 @@ private
    procedure Sub_Bytes (This : in out This_T);
    procedure Shift_Rows (This : in out This_T);
    procedure Mix_Columns (This : in out This_T);
-
-   pragma Precondition (Key_Length = 128 or else Key_Length = 192 or else Key_Length = 256);
 
 end AES;

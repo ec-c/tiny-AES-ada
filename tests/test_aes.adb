@@ -13,7 +13,7 @@ package body Test_AES is
       Ahven.Framework.Add_Test_Routine (Test, Test_AES128_Encrypt_CTR'Access, "AES128 Encrypt CTR");
    end Initialize;
 
-   package AES128 is new AES (128, u8, Positive, Bytes, Interfaces.Shift_Left, Interfaces.Shift_Right);
+--   package AES128 is new AES (128, u8, Positive, Bytes, Interfaces.Shift_Left, Interfaces.Shift_Right);
 
    procedure Test_AES128_Encrypt_CTR is
       Key : Bytes := [16#2b#, 16#7e#, 16#15#, 16#16#, 16#28#, 16#ae#, 16#d2#, 16#a6#,
