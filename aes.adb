@@ -1,6 +1,6 @@
 package body AES is
 
-   package body EBC is
+   package body ECB is
 
       procedure Encrypt (This : This_T; Buffer : T_Array) is
       begin
@@ -12,7 +12,7 @@ package body AES is
          null;
       end Decrypt;
 
-   end EBC;
+   end ECB;
 
    package body CBC is
 

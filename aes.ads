@@ -10,10 +10,10 @@ is
    type This_T is tagged limited private;
    type State_T is private;
 
-   package EBC is
+   package ECB is
       procedure Encrypt (This : This_T; Buffer : T_Array);
       procedure Decrypt (This : This_T; Buffer : T_Array);
-   end EBC;
+   end ECB;
 
    package CBC is
       procedure Encrypt (This : This_T; Buffer : T_Array);
