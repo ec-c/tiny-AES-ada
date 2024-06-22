@@ -9,7 +9,7 @@ package AES with
    Pure
 is
 
-   type State_T is private;
+   type State_Array is private;
 
    generic
       Nonce : T_Array;
@@ -23,15 +23,15 @@ is
 
       type Buffer is
          tagged limited record
-            Round_Key : T_Array (1 .. 176); -- AES128 -> 176
-            State     : State_T;
+            Round_Key : T_Array (1 .. 16 * 11); -- AES128 -> 16 bytes = 128 bit * 11 rounds
+            State     : State_Array;
          end record;
 
    end CTR;
 
 private
 
-   type State_T is array (1 .. 4, 1 .. 4) of T;
+   type State_Array is array (1 .. 4, 1 .. 4) of T;
 
    SBox : constant T_Array (1 .. 256) := [
    --   0       1       2       3       4       5       6       7       8       9       a       b       c       d       e       f
@@ -53,6 +53,6 @@ private
       16#8c#, 16#a1#, 16#89#, 16#0d#, 16#bf#, 16#e6#, 16#42#, 16#68#, 16#41#, 16#99#, 16#2d#, 16#0f#, 16#b0#, 16#54#, 16#bb#, 16#16#
    ];
 
-   function Sub_Bytes (State : State_T) return State_T;
+   function Sub_Bytes (State : State_Array) return State_Array;
 
 end AES;

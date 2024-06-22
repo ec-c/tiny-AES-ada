@@ -17,8 +17,8 @@ package body AES is
 
    --  The Sub_Bytes procedure substitutes the values in the state matrix with
    --  values in an S-box.
-   function Sub_Bytes (State : State_T) return State_T is
-      Result : State_T := State;
+   function Sub_Bytes (State : State_Array) return State_Array is
+      Result : State_Array := State;
    begin
       for I in State'Range (1) loop
          for J in State'Range (2) loop
