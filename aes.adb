@@ -7,7 +7,7 @@ package body AES is
       overriding
       procedure Initialize (This : in out Buffer) is
       begin
-         null;
+         This.Round_Key := Key_Expansion (Key);
       end Initialize;
 
       function Xcrypt (This : in out Buffer; Buffer : T_Array) return T_Array is
@@ -20,6 +20,12 @@ package body AES is
       end Xcrypt;
 
    end CTR;
+
+   function Key_Expansion (Key : T_Array) return Round_Key_Array is
+      Result : Round_Key_Array;
+   begin
+      return Result;
+   end Key_Expansion;
 
    --  The Sub_Bytes procedure substitutes the values in the state matrix with
    --  values in an S-box.

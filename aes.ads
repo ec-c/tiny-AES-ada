@@ -15,7 +15,7 @@ is
    type State_Array is private;
 
    generic
-      Init_Vector : T_Array;
+      Key, Init_Vector : T_Array;
    package CTR with
       SPARK_Mode
    is
@@ -37,8 +37,8 @@ is
 
 private
 
-   --  AES128 -> 16 bytes = 128 bit * 11 rounds
-   type Round_Key_Array is array (1 .. 11, 1 .. 16) of T;
+   --  AES128 -> 10 rounds * 16 bytes = 128 bit
+   type Round_Key_Array is array (1 .. 10, 1 .. 16) of T;
 
    type State_Array is array (1 .. 4, 1 .. 4) of T;
 
@@ -61,6 +61,7 @@ private
       16#e1#, 16#f8#, 16#98#, 16#11#, 16#69#, 16#d9#, 16#8e#, 16#94#, 16#9b#, 16#1e#, 16#87#, 16#e9#, 16#ce#, 16#55#, 16#28#, 16#df#,
       16#8c#, 16#a1#, 16#89#, 16#0d#, 16#bf#, 16#e6#, 16#42#, 16#68#, 16#41#, 16#99#, 16#2d#, 16#0f#, 16#b0#, 16#54#, 16#bb#, 16#16#];
 
+   function Key_Expansion (Key : T_Array) return Round_Key_Array;
    function Sub_Bytes (State : State_Array) return State_Array;
 
 end AES;

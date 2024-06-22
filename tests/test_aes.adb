@@ -31,7 +31,7 @@ package body Test_AES is
         [16#69#, 16#c4#, 16#e0#, 16#d8#, 16#6a#, 16#7b#, 16#04#, 16#30#,
          16#d8#, 16#cd#, 16#b7#, 16#80#, 16#70#, 16#b4#, 16#c5#, 16#5a#];
 
-      package AES128_CTR1 is new AES128.CTR (Init_Vector);
+      package AES128_CTR1 is new AES128.CTR (Key, Init_Vector);
       Buf1 : AES128_CTR1.Buffer;
       Result : constant Bytes := Buf1.Xcrypt (Input);
    begin
@@ -64,7 +64,7 @@ package body Test_AES is
          16#1e#, 16#03#, 16#1d#, 16#da#, 16#2f#, 16#be#, 16#03#, 16#d1#,
          16#79#, 16#21#, 16#70#, 16#a0#, 16#f3#, 16#00#, 16#9c#, 16#ee#];
 
-      package AES128_CTR1 is new AES128.CTR (Init_Vector);
+      package AES128_CTR1 is new AES128.CTR (Key, Init_Vector);
       Buf1 : AES128_CTR1.Buffer;
       Result : constant Bytes := Buf1.Xcrypt (Input);
    begin
