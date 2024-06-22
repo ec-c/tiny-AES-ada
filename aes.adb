@@ -1,33 +1,5 @@
 package body AES is
 
-   package body ECB is
-
-      procedure Encrypt (This : This_T; Buffer : T_Array) is
-      begin
-         null;
-      end Encrypt;
-
-      procedure Decrypt (This : This_T; Buffer : T_Array) is
-      begin
-         null;
-      end Decrypt;
-
-   end ECB;
-
-   package body CBC is
-
-      procedure Encrypt (This : This_T; Buffer : T_Array) is
-      begin
-         null;
-      end Encrypt;
-
-      procedure Decrypt (This : This_T; Buffer : T_Array) is
-      begin
-         null;
-      end Decrypt;
-
-   end CBC;
-
    --  Symmetrical operation: same procedure for encrypting as for decrypting.
    --  Note any IV/nonce should never be reused with the same key.
    package body CTR is
