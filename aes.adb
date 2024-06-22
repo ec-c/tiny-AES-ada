@@ -4,6 +4,12 @@ package body AES is
    --  Note any IV/nonce should never be reused with the same key.
    package body CTR is
 
+      overriding
+      procedure Initialize (This : in out Buffer) is
+      begin
+         null;
+      end Initialize;
+
       function Xcrypt (This : in out Buffer; Buffer : T_Array) return T_Array is
       begin
          for Buf in Buffer'Range loop

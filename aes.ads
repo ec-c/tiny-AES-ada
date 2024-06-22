@@ -1,3 +1,5 @@
+with Ada.Finalization;
+
 generic
    type T is mod <>;
    type T_Index is range <>;
@@ -17,13 +19,16 @@ is
    package CTR with
       SPARK_Mode
    is
-      type Buffer is tagged limited private;
+      type Buffer is new Ada.Finalization.Limited_Controlled with private;
+
+      overriding
+      procedure Initialize (This : in out Buffer);
 
       function Xcrypt (This : in out Buffer; Buffer : T_Array) return T_Array;
    private
 
-      type Buffer is
-         tagged limited record
+      type Buffer is new Ada.Finalization.Limited_Controlled with
+         record
             Round_Key : Round_Key_Array;
             State     : State_Array;
          end record;
