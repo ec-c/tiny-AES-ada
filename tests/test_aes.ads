@@ -2,6 +2,8 @@ with Interfaces;
 
 with Ahven.Framework;
 
+with AES;
+
 package Test_AES is
 
    type Test_T is new Ahven.Framework.Test_Case with null record;
