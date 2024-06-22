@@ -9,13 +9,7 @@ package AES with
    SPARK_Mode
 is
 
-   Key_Length : Positive := 128;
-
-   Unsupported_AES_Key_Length : exception;
-
    type This_T is tagged limited private;
-
-   type State_T is private;
 
    package CTR is
       procedure Xcrypt (This : This_T; Buffer : T_Array);
@@ -33,7 +27,7 @@ private
          State     : State_T;
       end record;
 
-   Forward_SBox : constant T_Array (1 .. 256) := [
+   SBox : constant T_Array (1 .. 256) := [
    --   0       1       2       3       4       5       6       7       8       9       a       b       c       d       e       f
       16#63#, 16#7c#, 16#77#, 16#7b#, 16#f2#, 16#6b#, 16#6f#, 16#c5#, 16#30#, 16#01#, 16#67#, 16#2b#, 16#fe#, 16#d7#, 16#ab#, 16#76#,
       16#ca#, 16#82#, 16#c9#, 16#7d#, 16#fa#, 16#59#, 16#47#, 16#f0#, 16#ad#, 16#d4#, 16#a2#, 16#af#, 16#9c#, 16#a4#, 16#72#, 16#c0#,

@@ -48,7 +48,7 @@ package body AES is
    begin
       for I in This.State'Range (1) loop
          for J in This.State'Range (2) loop
-            This.State (I, J) := Forward_SBox (T_Index (This.State (I, J)));
+            This.State (I, J) := SBox (T_Index (This.State (I, J)));
          end loop;
       end loop;
    end Sub_Bytes;
