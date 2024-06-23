@@ -15,7 +15,7 @@ is
    type Word_Array is private;
 
    generic
-      Key, Init_Vector : T_Array;
+      Key, Iv : T_Array;
    package CTR with
       SPARK_Mode
    is

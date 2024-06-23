@@ -10,27 +10,32 @@ package body AES is
       procedure Initialize (This : in out Buffer) is
       begin
          This.Round_Keys := Key_Expansion (Key);
+         This.State :=
+           [1 => [Iv (1),  Iv (2),  Iv (3),  Iv (4)],
+            2 => [Iv (5),  Iv (6),  Iv (7),  Iv (8)],
+            3 => [Iv (9),  Iv (10), Iv (11), Iv (12)],
+            4 => [Iv (13), Iv (14), Iv (15), Iv (16)]];
       end Initialize;
 
       function Xcrypt (This : in out Buffer; Buf : T_Array) return T_Array is
-         State : Word_Array := Cipher (This.State, This.Round_Keys);
+         Result : Word_Array := Cipher (This.State, This.Round_Keys);
       begin
-         return [Buf (1) xor State (1, 1),
-                 Buf (2) xor State (1, 2),
-                 Buf (3) xor State (1, 3),
-                 Buf (4) xor State (1, 4),
-                 Buf (5) xor State (2, 1),
-                 Buf (6) xor State (2, 2),
-                 Buf (7) xor State (2, 3),
-                 Buf (8) xor State (2, 4),
-                 Buf (9) xor State (3, 1),
-                 Buf (10) xor State (3, 2),
-                 Buf (11) xor State (3, 3),
-                 Buf (12) xor State (3, 4),
-                 Buf (13) xor State (4, 1),
-                 Buf (14) xor State (4, 2),
-                 Buf (15) xor State (4, 3),
-                 Buf (16) xor State (4, 4)];
+         return [Buf (1)  xor Result (1, 1),
+                 Buf (2)  xor Result (1, 2),
+                 Buf (3)  xor Result (1, 3),
+                 Buf (4)  xor Result (1, 4),
+                 Buf (5)  xor Result (2, 1),
+                 Buf (6)  xor Result (2, 2),
+                 Buf (7)  xor Result (2, 3),
+                 Buf (8)  xor Result (2, 4),
+                 Buf (9)  xor Result (3, 1),
+                 Buf (10) xor Result (3, 2),
+                 Buf (11) xor Result (3, 3),
+                 Buf (12) xor Result (3, 4),
+                 Buf (13) xor Result (4, 1),
+                 Buf (14) xor Result (4, 2),
+                 Buf (15) xor Result (4, 3),
+                 Buf (16) xor Result (4, 4)];
       end Xcrypt;
 
    end CTR;
