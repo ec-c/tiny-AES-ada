@@ -88,8 +88,6 @@ package body AES is
 
    --  The Cipher function is the main function that encrypts the plaintext.
    function Cipher (State : Word_Array; Round_Keys : Round_Key_Array) return Word_Array is
-      Result : Word_Array := State;
-
       function Get_Round_Key (R : Natural) return Word_Array is
          K : constant Round_Key_Array := Round_Keys;
       begin
@@ -99,6 +97,8 @@ package body AES is
                  4 => [K (R, 4, 1), K (R, 4, 2), K (R, 4, 3), K (R, 4, 4)]];
       end Get_Round_Key;
       pragma Inline (Get_Round_Key);
+
+      Result : Word_Array := State;
    begin
       --  Add the first round key to the state before starting the rounds.
       Result := Add_Round_Key (Result, Get_Round_Key (0));
