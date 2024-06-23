@@ -1,3 +1,5 @@
+with Ada.Text_IO;
+
 package body AES is
 
    --  Symmetrical operation: same procedure for encrypting as for decrypting.
@@ -11,31 +13,48 @@ package body AES is
       end Initialize;
 
       function Xcrypt (This : in out Buffer; Data : T_Array) return T_Array is
-         State, Result : Word_Array;
+         State, Keystream : Word_Array;
+         A : T_Array (1 .. 16);
       begin
-         State (1, 1) := Nonce (1)  xor Data (1);
-         State (1, 2) := Nonce (2)  xor Data (2);
-         State (1, 3) := Nonce (3)  xor Data (3);
-         State (1, 4) := Nonce (4)  xor Data (4);
-         State (2, 1) := Nonce (5)  xor Data (5);
-         State (2, 2) := Nonce (6)  xor Data (6);
-         State (2, 3) := Nonce (7)  xor Data (7);
-         State (2, 4) := Nonce (8)  xor Data (8);
-         State (3, 1) := Nonce (9)  xor Data (9);
-         State (3, 2) := Nonce (10) xor Data (10);
-         State (3, 3) := Nonce (11) xor Data (11);
-         State (3, 4) := Nonce (12) xor Data (12);
-         State (4, 1) := Nonce (13) xor Data (13);
-         State (4, 2) := Nonce (14) xor Data (14);
-         State (4, 3) := Nonce (15) xor Data (15);
-         State (4, 4) := Nonce (16) xor Data (16);
+         State (1, 1) := Nonce (1);
+         State (1, 2) := Nonce (2);
+         State (1, 3) := Nonce (3);
+         State (1, 4) := Nonce (4);
+         State (2, 1) := Nonce (5);
+         State (2, 2) := Nonce (6);
+         State (2, 3) := Nonce (7);
+         State (2, 4) := Nonce (8);
+         State (3, 1) := Nonce (9);
+         State (3, 2) := Nonce (10);
+         State (3, 3) := Nonce (11);
+         State (3, 4) := Nonce (12);
+         State (4, 1) := Nonce (13);
+         State (4, 2) := Nonce (14);
+         State (4, 3) := Nonce (15);
+         State (4, 4) := Nonce (16);
 
-         Result := Cipher (State, This.Round_Keys);
+         Keystream := Cipher (State, This.Round_Keys);
 
-         return [Result (1, 1), Result (1, 2), Result (1, 3), Result (1, 4),
-                 Result (2, 1), Result (2, 2), Result (2, 3), Result (2, 4),
-                 Result (3, 1), Result (3, 2), Result (3, 3), Result (3, 4),
-                 Result (4, 1), Result (4, 2), Result (4, 3), Result (4, 4)];
+         A := [Data (1) xor Keystream (1, 1),
+                 Data (2) xor Keystream (1, 2),
+                 Data (3) xor Keystream (1, 3),
+                 Data (4) xor Keystream (1, 4),
+                 Data (5) xor Keystream (2, 1),
+                 Data (6) xor Keystream (2, 2),
+                 Data (7) xor Keystream (2, 3),
+                 Data (8) xor Keystream (2, 4),
+                 Data (9) xor Keystream (3, 1),
+                 Data (10) xor Keystream (3, 2),
+                 Data (11) xor Keystream (3, 3),
+                 Data (12) xor Keystream (3, 4),
+                 Data (13) xor Keystream (4, 1),
+                 Data (14) xor Keystream (4, 2),
+                 Data (15) xor Keystream (4, 3),
+                 Data (16) xor Keystream (4, 4)];
+
+         Ada.Text_IO.Put_Line (A'Image);
+
+         return A;
       end Xcrypt;
 
    end CTR;
