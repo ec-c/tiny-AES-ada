@@ -18,24 +18,43 @@ package body AES is
       end Initialize;
 
       function Xcrypt (This : in out Buffer; Input : T_Array) return T_Array is
-         Result : Word_Array := Cipher (This.State, This.Round_Keys);
+         Result : Word_Array;
       begin
-         return [Input (1)  xor Result (1, 1),
-                 Input (2)  xor Result (1, 2),
-                 Input (3)  xor Result (1, 3),
-                 Input (4)  xor Result (1, 4),
-                 Input (5)  xor Result (2, 1),
-                 Input (6)  xor Result (2, 2),
-                 Input (7)  xor Result (2, 3),
-                 Input (8)  xor Result (2, 4),
-                 Input (9)  xor Result (3, 1),
-                 Input (10) xor Result (3, 2),
-                 Input (11) xor Result (3, 3),
-                 Input (12) xor Result (3, 4),
-                 Input (13) xor Result (4, 1),
-                 Input (14) xor Result (4, 2),
-                 Input (15) xor Result (4, 3),
-                 Input (16) xor Result (4, 4)];
+         This.State (1, 1) := Input (1) xor Key (1);
+         This.State (1, 2) := Input (2) xor Key (2);
+         This.State (1, 3) := Input (3) xor Key (3);
+         This.State (1, 4) := Input (4) xor Key (4);
+         This.State (2, 1) := Input (5) xor Key (5);
+         This.State (2, 2) := Input (6) xor Key (6);
+         This.State (2, 3) := Input (7) xor Key (7);
+         This.State (2, 4) := Input (8) xor Key (8);
+         This.State (3, 1) := Input (9) xor Key (9);
+         This.State (3, 2) := Input (10) xor Key (10);
+         This.State (3, 3) := Input (11) xor Key (11);
+         This.State (3, 4) := Input (12) xor Key (12);
+         This.State (4, 1) := Input (13) xor Key (13);
+         This.State (4, 2) := Input (14) xor Key (14);
+         This.State (4, 3) := Input (15) xor Key (15);
+         This.State (4, 4) := Input (16) xor Key (16);
+
+         Result := Cipher (This.State, This.Round_Keys);
+
+         return [Result (1, 1),
+                 Result (1, 2),
+                 Result (1, 3),
+                 Result (1, 4),
+                 Result (2, 1),
+                 Result (2, 2),
+                 Result (2, 3),
+                 Result (2, 4),
+                 Result (3, 1),
+                 Result (3, 2),
+                 Result (3, 3),
+                 Result (3, 4),
+                 Result (4, 1),
+                 Result (4, 2),
+                 Result (4, 3),
+                 Result (4, 4)];
       end Xcrypt;
 
    end CTR;
@@ -102,6 +121,7 @@ package body AES is
    begin
       --  Add the first round key to the state before starting the rounds.
       Result := Add_Round_Key (Result, Get_Round_Key (0));
+      Ada.Text_IO.Put_Line (Result'Image);
 
       for I in 1 .. 9 loop
          Result := Sub_Bytes (Result);
@@ -114,8 +134,6 @@ package body AES is
       Result := Sub_Bytes (Result);
       Result := Shift_Rows (Result);
       Result := Add_Round_Key (Result, Get_Round_Key (10));
-
-      Ada.Text_IO.Put_Line (Result'Image);
 
       return Result;
    end Cipher;
