@@ -39,46 +39,26 @@ package body AES is
       end Initialize;
 
       function Xcrypt (This : in out Buffer; Data : T_Array) return T_Array is
-         State, Keystream : Word_Array;
-         A : T_Array (1 .. 16);
+         package AES128_ECB is new ECB (Key);
+         Buffer    : AES128_ECB.Buffer;
+         Keystream : T_Array := Buffer.Encrypt (Nonce);
       begin
-         State (1, 1) := Nonce (1);
-         State (1, 2) := Nonce (2);
-         State (1, 3) := Nonce (3);
-         State (1, 4) := Nonce (4);
-         State (2, 1) := Nonce (5);
-         State (2, 2) := Nonce (6);
-         State (2, 3) := Nonce (7);
-         State (2, 4) := Nonce (8);
-         State (3, 1) := Nonce (9);
-         State (3, 2) := Nonce (10);
-         State (3, 3) := Nonce (11);
-         State (3, 4) := Nonce (12);
-         State (4, 1) := Nonce (13);
-         State (4, 2) := Nonce (14);
-         State (4, 3) := Nonce (15);
-         State (4, 4) := Nonce (16);
-
-         Keystream := Cipher (State, This.Round_Keys);
-
-         A := [Data (1) xor Keystream (1, 1),
-                 Data (2) xor Keystream (1, 2),
-                 Data (3) xor Keystream (1, 3),
-                 Data (4) xor Keystream (1, 4),
-                 Data (5) xor Keystream (2, 1),
-                 Data (6) xor Keystream (2, 2),
-                 Data (7) xor Keystream (2, 3),
-                 Data (8) xor Keystream (2, 4),
-                 Data (9) xor Keystream (3, 1),
-                 Data (10) xor Keystream (3, 2),
-                 Data (11) xor Keystream (3, 3),
-                 Data (12) xor Keystream (3, 4),
-                 Data (13) xor Keystream (4, 1),
-                 Data (14) xor Keystream (4, 2),
-                 Data (15) xor Keystream (4, 3),
-                 Data (16) xor Keystream (4, 4)];
-
-         return A;
+         return [Data (1)  xor Keystream (1),
+                 Data (2)  xor Keystream (2),
+                 Data (3)  xor Keystream (3),
+                 Data (4)  xor Keystream (4),
+                 Data (5)  xor Keystream (5),
+                 Data (6)  xor Keystream (6),
+                 Data (7)  xor Keystream (7),
+                 Data (8)  xor Keystream (8),
+                 Data (9)  xor Keystream (9),
+                 Data (10) xor Keystream (10),
+                 Data (11) xor Keystream (11),
+                 Data (12) xor Keystream (12),
+                 Data (13) xor Keystream (13),
+                 Data (14) xor Keystream (14),
+                 Data (15) xor Keystream (15),
+                 Data (16) xor Keystream (16)];
       end Xcrypt;
 
    end CTR;
