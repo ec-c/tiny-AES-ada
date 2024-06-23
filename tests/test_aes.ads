@@ -13,6 +13,8 @@ package Test_AES is
    procedure Initialize (Test : in out Test_T);
 
    procedure Test_AES128_Encrypt_CTR_1;
+   procedure Test_AES128_Decrypt_CTR_1;
+
    procedure Test_AES128_Encrypt_CTR_2;
 
 end Test_AES;
