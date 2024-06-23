@@ -15,7 +15,7 @@ is
    type Word_Array is private;
 
    generic
-      Key, Iv : T_Array;
+      Key, Nonce : T_Array;
    package CTR with
       SPARK_Mode
    is
@@ -24,7 +24,7 @@ is
       overriding
       procedure Initialize (This : in out Buffer);
 
-      function Xcrypt (This : in out Buffer; Input : T_Array) return T_Array;
+      function Xcrypt (This : in out Buffer; Data : T_Array) return T_Array;
    private
 
       type Buffer is new Ada.Finalization.Limited_Controlled with

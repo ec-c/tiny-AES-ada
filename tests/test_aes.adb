@@ -23,7 +23,7 @@ package body Test_AES is
       Key : constant Bytes :=
         [16#00#, 16#01#, 16#02#, 16#03#, 16#04#, 16#05#, 16#06#, 16#07#,
          16#08#, 16#09#, 16#0a#, 16#0b#, 16#0c#, 16#0d#, 16#0e#, 16#0f#];
-      Init_Vector : constant Bytes :=
+      Nonce : constant Bytes :=
         [16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#,
          16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#];
       Input : constant Bytes :=
@@ -33,7 +33,7 @@ package body Test_AES is
         [16#69#, 16#c4#, 16#e0#, 16#d8#, 16#6a#, 16#7b#, 16#04#, 16#30#,
          16#d8#, 16#cd#, 16#b7#, 16#80#, 16#70#, 16#b4#, 16#c5#, 16#5a#];
 
-      package AES128_CTR1 is new AES128.CTR (Key, Init_Vector);
+      package AES128_CTR1 is new AES128.CTR (Key, Nonce);
       Buf1 : AES128_CTR1.Buffer;
       Result : constant Bytes := Buf1.Xcrypt (Input);
    begin
@@ -44,7 +44,7 @@ package body Test_AES is
       Key : constant Bytes :=
         [16#00#, 16#01#, 16#02#, 16#03#, 16#04#, 16#05#, 16#06#, 16#07#,
          16#08#, 16#09#, 16#0a#, 16#0b#, 16#0c#, 16#0d#, 16#0e#, 16#0f#];
-      Init_Vector : constant Bytes :=
+      Nonce : constant Bytes :=
         [16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#,
          16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#];
       Input : constant Bytes :=
@@ -54,7 +54,7 @@ package body Test_AES is
         [16#00#, 16#11#, 16#22#, 16#33#, 16#44#, 16#55#, 16#66#, 16#77#,
          16#88#, 16#99#, 16#aa#, 16#bb#, 16#cc#, 16#dd#, 16#ee#, 16#ff#];
 
-      package AES128_CTR1 is new AES128.CTR (Key, Init_Vector);
+      package AES128_CTR1 is new AES128.CTR (Key, Nonce);
       Buf1 : AES128_CTR1.Buffer;
       Result : constant Bytes := Buf1.Xcrypt (Input);
    begin
@@ -65,7 +65,7 @@ package body Test_AES is
       Key : constant Bytes :=
         [16#2b#, 16#7e#, 16#15#, 16#16#, 16#28#, 16#ae#, 16#d2#, 16#a6#,
          16#ab#, 16#f7#, 16#15#, 16#88#, 16#09#, 16#cf#, 16#4f#, 16#3c#];
-      Init_Vector : constant Bytes :=
+      Nonce : constant Bytes :=
         [16#f0#, 16#f1#, 16#f2#, 16#f3#, 16#f4#, 16#f5#, 16#f6#, 16#f7#,
          16#f8#, 16#f9#, 16#fa#, 16#fb#, 16#fc#, 16#fd#, 16#fe#, 16#ff#];
       Input : constant Bytes :=
@@ -87,7 +87,7 @@ package body Test_AES is
          16#1e#, 16#03#, 16#1d#, 16#da#, 16#2f#, 16#be#, 16#03#, 16#d1#,
          16#79#, 16#21#, 16#70#, 16#a0#, 16#f3#, 16#00#, 16#9c#, 16#ee#];
 
-      package AES128_CTR1 is new AES128.CTR (Key, Init_Vector);
+      package AES128_CTR1 is new AES128.CTR (Key, Nonce);
       Buf1 : AES128_CTR1.Buffer;
       Result : constant Bytes := Buf1.Xcrypt (Input);
    begin
