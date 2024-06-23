@@ -56,13 +56,13 @@ package body AES is
          --  RotWord -> SubWord (using Sbox) -> Rcon
          --  Word 1
          Result (I, 1, 1) := Result (I - 1, 1, 1) xor
-            Sbox (T_Index (Result (I - 1, 4, 2)) + 1) xor Rcon (T_Index (I));
+            Sbox (T_Index (Result (I - 1, 4, 2) + 1)) xor Rcon (T_Index (I));
          Result (I, 1, 2) := Result (I - 1, 1, 2) xor
-            Sbox (T_Index (Result (I - 1, 4, 3)) + 1);
+            Sbox (T_Index (Result (I - 1, 4, 3) + 1));
          Result (I, 1, 3) := Result (I - 1, 1, 3) xor
-            Sbox (T_Index (Result (I - 1, 4, 4)) + 1);
+            Sbox (T_Index (Result (I - 1, 4, 4) + 1));
          Result (I, 1, 4) := Result (I - 1, 1, 4) xor
-            Sbox (T_Index (Result (I - 1, 4, 1)) + 1);
+            Sbox (T_Index (Result (I - 1, 4, 1) + 1));
 
          --  Word 2
          Result (I, 2, 1) := Result (I - 1, 2, 1) xor Result (I, 1, 1);
@@ -127,7 +127,7 @@ package body AES is
    begin
       for I in Word_Array'Range (1) loop
          for J in Word_Array'Range (2) loop
-            Result (I, J) := Sbox (T_Index (State (I, J)) + 1);
+            Result (I, J) := Sbox (T_Index (State (I, J) + 1));
          end loop;
       end loop;
 
