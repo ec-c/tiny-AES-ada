@@ -109,4 +109,35 @@ package body AES is
               4 => [State (4, 4), State (4, 1), State (4, 2), State (4, 3)]];
    end Shift_Rows;
 
+   --  The Mix_Columns functions mixes the columns of the state matrix.
+   --  TODO: rename variables
+   function Mix_Columns (State : Word_Array) return Word_Array is
+      function Xtime (X : T) return T is
+         (Shift_Left (X, 1) xor ((Shift_Right (X, 7) and 1) * 16#1b#));
+      pragma Inline (Xtime);
+
+      Result : Word_Array;
+      Tmp, Tm, T1 : T;
+   begin
+      for I in Word_Array'Range loop
+         T1 := State (I, 1);
+         Tmp := State (I, 1) xor State (I, 2) xor State (I, 3) xor State (I, 4);
+         Tm := State (I, 1) xor State (I, 2);
+
+         Tm := State (I, 2) xor State (I, 3);
+         Tm := Xtime (Tm);
+         Result (I, 2) := @ xor Tm xor Tmp;
+
+         Tm := State (I, 3) xor State (I, 4);
+         Tm := Xtime (Tm);
+         Result (I, 3) := @ xor Tm xor Tmp;
+
+         Tm := State (I, 4) xor T1;
+         Tm := Xtime (Tm);
+         Result (I, 4) := @ xor Tm xor Tmp;
+      end loop;
+
+      return Result;
+   end Mix_Columns;
+
 end AES;
