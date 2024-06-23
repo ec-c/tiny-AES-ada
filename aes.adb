@@ -67,6 +67,12 @@ package body AES is
       return Result;
    end Key_Expansion;
 
+   --  The Cipher function is the main function that encrypts the plaintext.
+   function Cipher (State : Word_Array; Round_Keys : Round_Key_Array) return Word_Array is
+   begin
+      return [];
+   end Cipher;
+
    --  The Sub_Bytes function substitutes the values in the state matrix with
    --  values in an S-box.
    function Sub_Bytes (State : Word_Array) return Word_Array is
