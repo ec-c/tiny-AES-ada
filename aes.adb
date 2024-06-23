@@ -153,57 +153,34 @@ package body AES is
               4 => [State (4, 1), State (1, 2), State (2, 3), State (3, 4)]];
    end Permute;
 
-   --  The Multiplicate functions mixes the rows of the transposed matrix.
+   --  The Mix_Columns functions mixes the rows of the transposed matrix.
    function Mix_Columns (State : Word_Array) return Word_Array is
-      Result : Word_Array;
-
       function Xtime (X : T) return T is
          (Shift_Left (X, 1) xor ((Shift_Right (X, 7) and 1) * 16#1b#));
       pragma Inline (Xtime);
 
-      function Mul (A, B : T) return T is
-         Result : T;
-         A1 : T := A;
-         B1 : T := B;
-      begin
-         for I in T'Range loop
-            --  add
-            if (B1 and 1) /= 0 then
-               Result := @ xor A1;
-            end if;
-
-            A1 := Xtime (A1);
-            B1 := Shift_Right (B1, 1);
-         end loop;
-         return Result;
-      end Mul;
-
-      S0, S1, S2, S3, A, B : T;
+      Result : Word_Array := State;
+      A, B, C : T;
    begin
       for I in Word_Array'Range loop
-         S0 := Mul (16#02#, State (I, 1));
-         S1 := Mul (16#03#, State (I, 2));
-         A := S0 xor S1;
-         B := State (I, 3) xor State (I, 4);
-         Result (I, 1) := A xor B;
+         A := Result (I, 1);
+         B := Result (I, 1) xor Result (I, 2) xor Result (I, 3) xor Result (I, 4);
 
-         S1 := Mul (16#02#, State (I, 2));
-         S2 := Mul (16#03#, State (I, 3));
-         A := State (I, 1) xor S1;
-         B := S2 xor State (I, 4);
-         Result (I, 2) := A xor B;
+         C := Result (I, 1) xor Result (I, 2);
+         C := Xtime (C);
+         Result (I, 1) := @ xor C xor B;
 
-         S2 := Mul (16#02#, State (I, 3));
-         S3 := Mul (16#03#, State (I, 4));
-         A := State (I, 1) xor State (I, 2);
-         B := S2 xor S3;
-         Result (I, 3) := A xor B;
+         C := Result (I, 2) xor Result (I, 3);
+         C := Xtime (C);
+         Result (I, 2) := @ xor C xor B;
 
-         S0 := Mul (16#03#, State (I, 1));
-         S3 := Mul (16#02#, State (I, 4));
-         A := S0 xor State (I, 2);
-         B := State (I, 3) xor S3;
-         Result (I, 4) := A xor B;
+         C := Result (I, 3) xor Result (I, 4);
+         C := Xtime (C);
+         Result (I, 3) := @ xor C xor B;
+
+         C := Result (I, 4) xor A;
+         C := Xtime (C);
+         Result (I, 4) := @ xor C xor B;
       end loop;
 
       return Result;
