@@ -15,22 +15,22 @@ package body AES is
       function Xcrypt (This : in out Buffer; Input : T_Array) return T_Array is
          State, Result : Word_Array;
       begin
-         State (1, 1) := Input (1) xor Key (1);
-         State (1, 2) := Input (2) xor Key (2);
-         State (1, 3) := Input (3) xor Key (3);
-         State (1, 4) := Input (4) xor Key (4);
-         State (2, 1) := Input (5) xor Key (5);
-         State (2, 2) := Input (6) xor Key (6);
-         State (2, 3) := Input (7) xor Key (7);
-         State (2, 4) := Input (8) xor Key (8);
-         State (3, 1) := Input (9) xor Key (9);
-         State (3, 2) := Input (10) xor Key (10);
-         State (3, 3) := Input (11) xor Key (11);
-         State (3, 4) := Input (12) xor Key (12);
-         State (4, 1) := Input (13) xor Key (13);
-         State (4, 2) := Input (14) xor Key (14);
-         State (4, 3) := Input (15) xor Key (15);
-         State (4, 4) := Input (16) xor Key (16);
+         State (1, 1) := Input (1);
+         State (1, 2) := Input (2);
+         State (1, 3) := Input (3);
+         State (1, 4) := Input (4);
+         State (2, 1) := Input (5);
+         State (2, 2) := Input (6);
+         State (2, 3) := Input (7);
+         State (2, 4) := Input (8);
+         State (3, 1) := Input (9);
+         State (3, 2) := Input (10);
+         State (3, 3) := Input (11);
+         State (3, 4) := Input (12);
+         State (4, 1) := Input (13);
+         State (4, 2) := Input (14);
+         State (4, 3) := Input (15);
+         State (4, 4) := Input (16);
 
          Result := Cipher (State, This.Round_Keys);
 
@@ -70,13 +70,13 @@ package body AES is
          --  RotWord -> SubWord (using Sbox) -> Rcon
          --  Word 1
          Result (I, 1, 1) := Result (I - 1, 1, 1) xor
-            Sbox (T_Index (Result (I - 1, 4, 2) + 1)) xor Rcon (T_Index (I));
+            Sbox (T_Index'First + T'Pos (Result (I - 1, 4, 2))) xor Rcon (T_Index (I));
          Result (I, 1, 2) := Result (I - 1, 1, 2) xor
-            Sbox (T_Index (Result (I - 1, 4, 3) + 1));
+            Sbox (T_Index'First + T'Pos (Result (I - 1, 4, 3)));
          Result (I, 1, 3) := Result (I - 1, 1, 3) xor
-            Sbox (T_Index (Result (I - 1, 4, 4) + 1));
+            Sbox (T_Index'First + T'Pos (Result (I - 1, 4, 4)));
          Result (I, 1, 4) := Result (I - 1, 1, 4) xor
-            Sbox (T_Index (Result (I - 1, 4, 1) + 1));
+            Sbox (T_Index'First + T'Pos (Result (I - 1, 4, 1)));
 
          --  Word 2
          Result (I, 2, 1) := Result (I - 1, 2, 1) xor Result (I, 1, 1);
@@ -114,12 +114,13 @@ package body AES is
 
       Result : Word_Array := State;
    begin
+      Ada.Text_IO.Put_Line (Result'Image);
       --  Add the first round key to the state before starting the rounds.
       Result := Add_Round_Key (Result, Get_Round_Key (0));
-      Ada.Text_IO.Put_Line (Result'Image);
 
       for I in 1 .. 9 loop
          Result := Sub_Bytes (Result);
+         Ada.Text_IO.Put_Line (Result'Image);
          Result := Shift_Rows (Result);
          Result := Mix_Columns (Result);
          Result := Add_Round_Key (Result, Get_Round_Key (I));
@@ -140,7 +141,7 @@ package body AES is
    begin
       for I in Word_Array'Range (1) loop
          for J in Word_Array'Range (2) loop
-            Result (I, J) := Sbox (T_Index (State (I, J) + 1));
+            Result (I, J) := Sbox (T_Index'First + T'Pos (State (I, J)));
          end loop;
       end loop;
 
