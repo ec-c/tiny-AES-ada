@@ -1,5 +1,4 @@
 with Ada.Finalization;
-with Interfaces;
 
 generic
    type T is mod <>;
@@ -28,9 +27,6 @@ is
       function Xcrypt (This : in out Buffer; Buffer : T_Array) return T_Array;
    private
 
-      subtype u32 is Interfaces.Unsigned_32 range Interfaces.Unsigned_32'Range;
-      type Words is array (Positive range <>) of aliased u32;
-
       type Buffer is new Ada.Finalization.Limited_Controlled with
          record
             Round_Keys : Round_Key_Array;
@@ -46,7 +42,7 @@ private
 
    type State_Array is array (1 .. 4, 1 .. 4) of T;
 
-   SBox : constant T_Array (1 .. 256) :=
+   Sbox : constant T_Array (1 .. 256) :=
    --   0       1       2       3       4       5       6       7       8       9       a       b       c       d       e       f
      [16#63#, 16#7c#, 16#77#, 16#7b#, 16#f2#, 16#6b#, 16#6f#, 16#c5#, 16#30#, 16#01#, 16#67#, 16#2b#, 16#fe#, 16#d7#, 16#ab#, 16#76#,
       16#ca#, 16#82#, 16#c9#, 16#7d#, 16#fa#, 16#59#, 16#47#, 16#f0#, 16#ad#, 16#d4#, 16#a2#, 16#af#, 16#9c#, 16#a4#, 16#72#, 16#c0#,
@@ -64,6 +60,9 @@ private
       16#70#, 16#3e#, 16#b5#, 16#66#, 16#48#, 16#03#, 16#f6#, 16#0e#, 16#61#, 16#35#, 16#57#, 16#b9#, 16#86#, 16#c1#, 16#1d#, 16#9e#,
       16#e1#, 16#f8#, 16#98#, 16#11#, 16#69#, 16#d9#, 16#8e#, 16#94#, 16#9b#, 16#1e#, 16#87#, 16#e9#, 16#ce#, 16#55#, 16#28#, 16#df#,
       16#8c#, 16#a1#, 16#89#, 16#0d#, 16#bf#, 16#e6#, 16#42#, 16#68#, 16#41#, 16#99#, 16#2d#, 16#0f#, 16#b0#, 16#54#, 16#bb#, 16#16#];
+
+   Rcon : constant T_Array (1 .. 10) :=
+     [16#01#, 16#02#, 16#04#, 16#08#, 16#10#, 16#20#, 16#40#, 16#80#, 16#1b#, 16#36#];
 
    function Key_Expansion (Key : T_Array) return Round_Key_Array;
    function Sub_Bytes (State : State_Array) return State_Array;
