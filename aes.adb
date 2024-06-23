@@ -26,44 +26,42 @@ package body AES is
    function Key_Expansion (Key : T_Array) return Round_Key_Array is
       Result : Round_Key_Array :=
         --  Initialise the first round by using the key itself.
-        [0 => [Key (1), Key (2), Key (3), Key (4), Key (5), Key (6), Key (7), Key (8),
-               Key (9), Key (10), Key (11), Key (12), Key (13), Key (14), Key (15), Key (16)],
-         others => [others => 16#ff#]];
-
-      Last_Word : array (1 .. 4) of T;
+        [0 => [1 => [Key (1), Key (2), Key (3), Key (4)],
+               2 => [Key (5), Key (6), Key (7), Key (8)],
+               3 => [Key (9), Key (10), Key (11), Key (12)],
+               4 => [Key (13), Key (14), Key (15), Key (16)]],
+         1 .. 10 => [1 .. 4 => [1 .. 4 => 0]]];
    begin
       --  All other round keys are found from the previous round keys.
       for I in 1 .. Round_Key_Array'Last (1) loop
          --  RotWord -> SubWord (using Sbox) -> Rcon
-         Last_Word :=
-           [Sbox (T_Index (Result (I - 1, 14)) + 1) xor Rcon (T_Index (I)),
-            Sbox (T_Index (Result (I - 1, 15)) + 1),
-            Sbox (T_Index (Result (I - 1, 16)) + 1),
-            Sbox (T_Index (Result (I - 1, 13)) + 1)];
-
          --  Word 1
-         Result (I, 1) := Result (I - 1, 1) xor Last_Word (1);
-         Result (I, 2) := Result (I - 1, 2) xor Last_Word (2);
-         Result (I, 3) := Result (I - 1, 3) xor Last_Word (3);
-         Result (I, 4) := Result (I - 1, 4) xor Last_Word (4);
+         Result (I, 1, 1) := Result (I - 1, 1, 1) xor
+            Sbox (T_Index (Result (I - 1, 4, 2)) + 1) xor Rcon (T_Index (I));
+         Result (I, 1, 2) := Result (I - 1, 1, 2) xor
+            Sbox (T_Index (Result (I - 1, 4, 3)) + 1);
+         Result (I, 1, 3) := Result (I - 1, 1, 3) xor
+            Sbox (T_Index (Result (I - 1, 4, 4)) + 1);
+         Result (I, 1, 4) := Result (I - 1, 1, 4) xor
+            Sbox (T_Index (Result (I - 1, 4, 1)) + 1);
 
          --  Word 2
-         Result (I, 5) := Result (I - 1, 5) xor Result (I, 1);
-         Result (I, 6) := Result (I - 1, 6) xor Result (I, 2);
-         Result (I, 7) := Result (I - 1, 7) xor Result (I, 3);
-         Result (I, 8) := Result (I - 1, 8) xor Result (I, 4);
+         Result (I, 2, 1) := Result (I - 1, 2, 1) xor Result (I, 1, 1);
+         Result (I, 2, 2) := Result (I - 1, 2, 2) xor Result (I, 1, 2);
+         Result (I, 2, 3) := Result (I - 1, 2, 3) xor Result (I, 1, 3);
+         Result (I, 2, 4) := Result (I - 1, 2, 4) xor Result (I, 1, 4);
 
          --  Word 3
-         Result (I, 9)  := Result (I - 1, 9)  xor Result (I, 5);
-         Result (I, 10) := Result (I - 1, 10) xor Result (I, 6);
-         Result (I, 11) := Result (I - 1, 11) xor Result (I, 7);
-         Result (I, 12) := Result (I - 1, 12) xor Result (I, 8);
+         Result (I, 3, 1) := Result (I - 1, 3, 1) xor Result (I, 2, 1);
+         Result (I, 3, 2) := Result (I - 1, 3, 2) xor Result (I, 2, 2);
+         Result (I, 3, 3) := Result (I - 1, 3, 3) xor Result (I, 2, 3);
+         Result (I, 3, 4) := Result (I - 1, 3, 4) xor Result (I, 2, 4);
 
          --  Word 4
-         Result (I, 13) := Result (I - 1, 13) xor Result (I, 9);
-         Result (I, 14) := Result (I - 1, 14) xor Result (I, 10);
-         Result (I, 15) := Result (I - 1, 15) xor Result (I, 11);
-         Result (I, 16) := Result (I - 1, 16) xor Result (I, 12);
+         Result (I, 4, 1) := Result (I - 1, 4, 1) xor Result (I, 3, 1);
+         Result (I, 4, 2) := Result (I - 1, 4, 2) xor Result (I, 3, 2);
+         Result (I, 4, 3) := Result (I - 1, 4, 3) xor Result (I, 3, 3);
+         Result (I, 4, 4) := Result (I - 1, 4, 4) xor Result (I, 3, 4);
       end loop;
 
       return Result;

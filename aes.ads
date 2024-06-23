@@ -37,8 +37,8 @@ is
 
 private
 
-   --  AES128 -> 10 rounds * 16 bytes = 128 bit
-   type Round_Key_Array is array (0 .. 10, 1 .. 16) of T;
+   --  AES128 -> 10 rounds * (4 * 4) bytes = 128 bit
+   type Round_Key_Array is array (0 .. 10, 1 .. 4, 1 .. 4) of T;
 
    type State_Array is array (1 .. 4, 1 .. 4) of T;
 
