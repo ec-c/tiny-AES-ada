@@ -1,3 +1,5 @@
+with Ada.Text_IO;
+
 package body AES is
 
    --  Symmetrical operation: same procedure for encrypting as for decrypting.
@@ -10,13 +12,25 @@ package body AES is
          This.Round_Keys := Key_Expansion (Key);
       end Initialize;
 
-      function Xcrypt (This : in out Buffer; Buffer : T_Array) return T_Array is
+      function Xcrypt (This : in out Buffer; Buf : T_Array) return T_Array is
+         State : Word_Array := Cipher (This.State, This.Round_Keys);
       begin
-         for Buf in Buffer'Range loop
-            This.State := Sub_Bytes (@);
-         end loop;
-
-         return [];
+         return [Buf (1) xor State (1, 1),
+                 Buf (2) xor State (1, 2),
+                 Buf (3) xor State (1, 3),
+                 Buf (4) xor State (1, 4),
+                 Buf (5) xor State (2, 1),
+                 Buf (6) xor State (2, 2),
+                 Buf (7) xor State (2, 3),
+                 Buf (8) xor State (2, 4),
+                 Buf (9) xor State (3, 1),
+                 Buf (10) xor State (3, 2),
+                 Buf (11) xor State (3, 3),
+                 Buf (12) xor State (3, 4),
+                 Buf (13) xor State (4, 1),
+                 Buf (14) xor State (4, 2),
+                 Buf (15) xor State (4, 3),
+                 Buf (16) xor State (4, 4)];
       end Xcrypt;
 
    end CTR;
@@ -69,8 +83,36 @@ package body AES is
 
    --  The Cipher function is the main function that encrypts the plaintext.
    function Cipher (State : Word_Array; Round_Keys : Round_Key_Array) return Word_Array is
+      Result : Word_Array := State;
+
+      function Get_Round_Key (R : Natural) return Word_Array is
+         K : constant Round_Key_Array := Round_Keys;
+      begin
+         return [1 => [K (R, 1, 1), K (R, 1, 2), K (R, 1, 3), K (R, 1, 4)],
+                 2 => [K (R, 2, 1), K (R, 2, 2), K (R, 2, 3), K (R, 2, 4)],
+                 3 => [K (R, 3, 1), K (R, 3, 2), K (R, 3, 3), K (R, 3, 4)],
+                 4 => [K (R, 4, 1), K (R, 4, 2), K (R, 4, 3), K (R, 4, 4)]];
+      end Get_Round_Key;
+      pragma Inline (Get_Round_Key);
    begin
-      return [];
+      --  Add the first round key to the state before starting the rounds.
+      Result := Add_Round_Key (Result, Get_Round_Key (0));
+
+      for I in 1 .. 9 loop
+         Result := Sub_Bytes (Result);
+         Result := Shift_Rows (Result);
+         Result := Mix_Columns (Result);
+         Result := Add_Round_Key (Result, Get_Round_Key (I));
+      end loop;
+
+      --  Last round
+      Result := Sub_Bytes (Result);
+      Result := Shift_Rows (Result);
+      Result := Add_Round_Key (Result, Get_Round_Key (10));
+
+      Ada.Text_IO.Put_Line (Result'Image);
+
+      return Result;
    end Cipher;
 
    --  The Sub_Bytes function substitutes the values in the state matrix with

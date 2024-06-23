@@ -7,8 +7,8 @@ generic
    with function Shift_Left (Value : T; Amount : Natural) return T;
    with function Shift_Right (Value : T; Amount : Natural) return T;
 package AES with
-   SPARK_Mode,
-   Pure
+   SPARK_Mode--,
+   --Pure
 is
 
    type Round_Key_Array is private;
@@ -24,7 +24,7 @@ is
       overriding
       procedure Initialize (This : in out Buffer);
 
-      function Xcrypt (This : in out Buffer; Buffer : T_Array) return T_Array;
+      function Xcrypt (This : in out Buffer; Buf : T_Array) return T_Array;
    private
 
       type Buffer is new Ada.Finalization.Limited_Controlled with
