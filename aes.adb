@@ -32,12 +32,6 @@ package body AES is
    --  Note that an IV/nonce should never be reused with the same key.
    package body CTR is
 
-      overriding
-      procedure Initialize (This : in out Buffer) is
-      begin
-         This.Round_Keys := Key_Expansion (Key);
-      end Initialize;
-
       function Xcrypt (This : in out Buffer; Data : T_Array) return T_Array is
          package AES128_ECB is new ECB (Key);
          Buffer    : AES128_ECB.Buffer;

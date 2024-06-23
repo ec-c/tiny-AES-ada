@@ -40,17 +40,14 @@ is
    package CTR with
       SPARK_Mode
    is
-      type Buffer is new Ada.Finalization.Limited_Controlled with private;
-
-      overriding
-      procedure Initialize (This : in out Buffer);
+      type Buffer is tagged limited private;
 
       function Xcrypt (This : in out Buffer; Data : T_Array) return T_Array;
    private
 
-      type Buffer is new Ada.Finalization.Limited_Controlled with
-         record
-            Round_Keys : Round_Key_Array;
+      type Buffer is
+         tagged limited record
+            Counter : Integer;
          end record;
 
    end CTR;
