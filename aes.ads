@@ -65,6 +65,7 @@ private
      [16#01#, 16#02#, 16#04#, 16#08#, 16#10#, 16#20#, 16#40#, 16#80#, 16#1b#, 16#36#];
 
    function Key_Expansion (Key : T_Array) return Round_Key_Array;
+   function Add_Round_Key (State : State_Array; Round : Natural; Round_Key : T) return State_Array;
    function Sub_Bytes (State : State_Array) return State_Array;
 
 end AES;

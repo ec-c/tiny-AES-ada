@@ -69,14 +69,28 @@ package body AES is
       return Result;
    end Key_Expansion;
 
-   --  The Sub_Bytes procedure substitutes the values in the state matrix with
-   --  values in an S-box.
-   function Sub_Bytes (State : State_Array) return State_Array is
-      Result : State_Array := State;
+   --  The Add_Round_Key function adds the round key to the state.
+   --  The round key is added to the state by an XOR function.
+   function Add_Round_Key (State : State_Array; Round : Natural; Round_Key : T) return State_Array is
+      Result : State_Array;
    begin
       for I in State_Array'Range (1) loop
          for J in State_Array'Range (2) loop
-            Result (I, J) := Sbox (T_Index (State (I, J)));
+            null; -- Result (I, J) := State (I, J) xor Round_Key (T_Index (Round * 4 * 4 + (I * 4) + J));
+         end loop;
+      end loop;
+
+      return Result;
+   end Add_Round_Key;
+
+   --  The Sub_Bytes function substitutes the values in the state matrix with
+   --  values in an S-box.
+   function Sub_Bytes (State : State_Array) return State_Array is
+      Result : State_Array;
+   begin
+      for I in State_Array'Range (1) loop
+         for J in State_Array'Range (2) loop
+            Result (I, J) := Sbox (T_Index (State (I, J)) + 1);
          end loop;
       end loop;
 
