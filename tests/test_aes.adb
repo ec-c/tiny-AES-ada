@@ -10,6 +10,9 @@ package body Test_AES is
    begin
       Set_Name (Test, "AES");
 
+      Ahven.Framework.Add_Test_Routine (Test, Test_AES_ECB_128_Encrypt_Test_Vector_1'Access,
+         "AES/ECB-128 Encrypt Test Vector 1");
+
       Ahven.Framework.Add_Test_Routine (Test, Test_AES128_Encrypt_CTR_1'Access,
          "AES128 Encrypt CTR 1");
       Ahven.Framework.Add_Test_Routine (Test, Test_AES128_Decrypt_CTR_1'Access,
@@ -18,6 +21,24 @@ package body Test_AES is
 
    package AES128 is new AES
       (u8, Positive, Bytes, Interfaces.Shift_Left, Interfaces.Shift_Right);
+
+   procedure Test_AES_ECB_128_Encrypt_Test_Vector_1 is
+      Key : constant Bytes :=
+        [16#2b#, 16#7e#, 16#15#, 16#16#, 16#28#, 16#ae#, 16#d2#, 16#a6#,
+         16#ab#, 16#f7#, 16#15#, 16#88#, 16#09#, 16#cf#, 16#4f#, 16#3c#];
+      Input : constant Bytes :=
+        [16#6b#, 16#c1#, 16#be#, 16#e2#, 16#2e#, 16#40#, 16#9f#, 16#96#,
+         16#e9#, 16#3d#, 16#7e#, 16#11#, 16#73#, 16#93#, 16#17#, 16#2a#];
+      Expected : constant Bytes :=
+        [16#3a#, 16#d7#, 16#7b#, 16#b4#, 16#0d#, 16#7a#, 16#36#, 16#60#,
+         16#a8#, 16#9e#, 16#ca#, 16#f3#, 16#24#, 16#66#, 16#ef#, 16#97#];
+
+      package AES128_ECB1 is new AES128.ECB (Key);
+      Buf1 : AES128_ECB1.Buffer;
+      Result : constant Bytes := Buf1.Encrypt (Input);
+   begin
+      Assert (Result = Expected, "bytes mismatch");
+   end Test_AES_ECB_128_Encrypt_Test_Vector_1;
 
    procedure Test_AES128_Encrypt_CTR_1 is
       Key : constant Bytes :=

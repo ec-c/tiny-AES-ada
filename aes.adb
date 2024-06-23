@@ -2,6 +2,37 @@ with Ada.Text_IO;
 
 package body AES is
 
+   package body ECB is
+
+      overriding
+      procedure Initialize (This : in out Buffer) is
+      begin
+         This.Round_Keys := Key_Expansion (Key);
+      end Initialize;
+
+      function Encrypt (This : in out Buffer; Data : T_Array) return T_Array is
+         State : Word_Array :=
+           [1 => [Data (1),  Data (2),  Data (3),  Data (4)],
+            2 => [Data (5),  Data (6),  Data (7),  Data (8)],
+            3 => [Data (9),  Data (10), Data (11), Data (12)],
+            4 => [Data (13), Data (14), Data (15), Data (16)]];
+         Result : Word_Array;
+         A : T_Array (1 .. 16);
+      begin
+         Result := Cipher (State, This.Round_Keys);
+
+         A := [Result (1, 1), Result (1, 2), Result (1, 3), Result (1, 4),
+               Result (2, 1), Result (2, 2), Result (2, 3), Result (2, 4),
+               Result (3, 1), Result (3, 2), Result (3, 3), Result (3, 4),
+               Result (4, 1), Result (4, 2), Result (4, 3), Result (4, 4)];
+
+         Ada.Text_IO.Put_Line (A'Image);
+
+         return A;
+      end Encrypt;
+
+   end ECB;
+
    --  Symmetrical operation: same procedure for encrypting as for decrypting.
    --  Note that an IV/nonce should never be reused with the same key.
    package body CTR is
@@ -51,8 +82,6 @@ package body AES is
                  Data (14) xor Keystream (4, 2),
                  Data (15) xor Keystream (4, 3),
                  Data (16) xor Keystream (4, 4)];
-
-         Ada.Text_IO.Put_Line (A'Image);
 
          return A;
       end Xcrypt;

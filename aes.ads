@@ -15,6 +15,27 @@ is
    type Word_Array is private;
 
    generic
+      Key : T_Array;
+   package ECB with
+      SPARK_Mode
+   is
+      type Buffer is new Ada.Finalization.Limited_Controlled with private;
+
+      overriding
+      procedure Initialize (This : in out Buffer);
+
+      function Encrypt (This : in out Buffer; Data : T_Array) return T_Array;
+
+   private
+
+      type Buffer is new Ada.Finalization.Limited_Controlled with
+         record
+            Round_Keys : Round_Key_Array;
+         end record;
+
+   end ECB;
+
+   generic
       Key, Nonce : T_Array;
    package CTR with
       SPARK_Mode

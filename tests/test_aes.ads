@@ -12,6 +12,8 @@ package Test_AES is
    overriding
    procedure Initialize (Test : in out Test_T);
 
+   procedure Test_AES_ECB_128_Encrypt_Test_Vector_1;
+
    procedure Test_AES128_Encrypt_CTR_1;
    procedure Test_AES128_Decrypt_CTR_1;
 
