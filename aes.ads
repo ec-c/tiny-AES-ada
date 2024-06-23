@@ -30,7 +30,6 @@ is
       type Buffer is new Ada.Finalization.Limited_Controlled with
          record
             Round_Keys : Round_Key_Array;
-            State      : Word_Array;
          end record;
 
    end CTR;

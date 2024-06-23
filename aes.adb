@@ -10,34 +10,29 @@ package body AES is
       procedure Initialize (This : in out Buffer) is
       begin
          This.Round_Keys := Key_Expansion (Key);
-         This.State :=
-           [1 => [Iv (1),  Iv (2),  Iv (3),  Iv (4)],
-            2 => [Iv (5),  Iv (6),  Iv (7),  Iv (8)],
-            3 => [Iv (9),  Iv (10), Iv (11), Iv (12)],
-            4 => [Iv (13), Iv (14), Iv (15), Iv (16)]];
       end Initialize;
 
       function Xcrypt (This : in out Buffer; Input : T_Array) return T_Array is
-         Result : Word_Array;
+         State, Result : Word_Array;
       begin
-         This.State (1, 1) := Input (1) xor Key (1);
-         This.State (1, 2) := Input (2) xor Key (2);
-         This.State (1, 3) := Input (3) xor Key (3);
-         This.State (1, 4) := Input (4) xor Key (4);
-         This.State (2, 1) := Input (5) xor Key (5);
-         This.State (2, 2) := Input (6) xor Key (6);
-         This.State (2, 3) := Input (7) xor Key (7);
-         This.State (2, 4) := Input (8) xor Key (8);
-         This.State (3, 1) := Input (9) xor Key (9);
-         This.State (3, 2) := Input (10) xor Key (10);
-         This.State (3, 3) := Input (11) xor Key (11);
-         This.State (3, 4) := Input (12) xor Key (12);
-         This.State (4, 1) := Input (13) xor Key (13);
-         This.State (4, 2) := Input (14) xor Key (14);
-         This.State (4, 3) := Input (15) xor Key (15);
-         This.State (4, 4) := Input (16) xor Key (16);
+         State (1, 1) := Input (1) xor Key (1);
+         State (1, 2) := Input (2) xor Key (2);
+         State (1, 3) := Input (3) xor Key (3);
+         State (1, 4) := Input (4) xor Key (4);
+         State (2, 1) := Input (5) xor Key (5);
+         State (2, 2) := Input (6) xor Key (6);
+         State (2, 3) := Input (7) xor Key (7);
+         State (2, 4) := Input (8) xor Key (8);
+         State (3, 1) := Input (9) xor Key (9);
+         State (3, 2) := Input (10) xor Key (10);
+         State (3, 3) := Input (11) xor Key (11);
+         State (3, 4) := Input (12) xor Key (12);
+         State (4, 1) := Input (13) xor Key (13);
+         State (4, 2) := Input (14) xor Key (14);
+         State (4, 3) := Input (15) xor Key (15);
+         State (4, 4) := Input (16) xor Key (16);
 
-         Result := Cipher (This.State, This.Round_Keys);
+         Result := Cipher (State, This.Round_Keys);
 
          return [Result (1, 1),
                  Result (1, 2),
