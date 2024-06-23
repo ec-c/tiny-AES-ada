@@ -12,7 +12,7 @@ package AES with
 is
 
    type Round_Key_Array is private;
-   type State_Array is private;
+   type Word_Array is private;
 
    generic
       Key, Init_Vector : T_Array;
@@ -30,7 +30,7 @@ is
       type Buffer is new Ada.Finalization.Limited_Controlled with
          record
             Round_Keys : Round_Key_Array;
-            State      : State_Array;
+            State      : Word_Array;
          end record;
 
    end CTR;
@@ -40,7 +40,7 @@ private
    --  AES128 -> 10 rounds * (4 * 4) bytes = 128 bit
    type Round_Key_Array is array (0 .. 10, 1 .. 4, 1 .. 4) of T;
 
-   type State_Array is array (1 .. 4, 1 .. 4) of T;
+   type Word_Array is array (1 .. 4, 1 .. 4) of T;
 
    Sbox : constant T_Array (1 .. 256) :=
    --   0       1       2       3       4       5       6       7       8       9       a       b       c       d       e       f
@@ -65,7 +65,7 @@ private
      [16#01#, 16#02#, 16#04#, 16#08#, 16#10#, 16#20#, 16#40#, 16#80#, 16#1b#, 16#36#];
 
    function Key_Expansion (Key : T_Array) return Round_Key_Array;
-   function Add_Round_Key (State : State_Array; Round : Natural; Round_Key : T) return State_Array;
-   function Sub_Bytes (State : State_Array) return State_Array;
+   function Add_Round_Key (State : Word_Array; Round : Natural; Round_Key : T) return Word_Array;
+   function Sub_Bytes (State : Word_Array) return Word_Array;
 
 end AES;
