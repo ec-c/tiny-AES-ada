@@ -1,3 +1,5 @@
+with Ada.Unchecked_Conversion;
+
 package body AES is
 
    --  Symmetrical operation: same procedure for encrypting as for decrypting.
@@ -12,42 +14,16 @@ package body AES is
 
       function Xcrypt (This : in out Buffer; Input : T_Array) return T_Array is
          State, Result : Word_Array;
-      begin
-         State (1, 1) := Input (1);
-         State (1, 2) := Input (2);
-         State (1, 3) := Input (3);
-         State (1, 4) := Input (4);
-         State (2, 1) := Input (5);
-         State (2, 2) := Input (6);
-         State (2, 3) := Input (7);
-         State (2, 4) := Input (8);
-         State (3, 1) := Input (9);
-         State (3, 2) := Input (10);
-         State (3, 3) := Input (11);
-         State (3, 4) := Input (12);
-         State (4, 1) := Input (13);
-         State (4, 2) := Input (14);
-         State (4, 3) := Input (15);
-         State (4, 4) := Input (16);
 
+         function Convert is new Ada.Unchecked_Conversion (T_Array, Word_Array);
+      begin
+         State := Convert (Input);
          Result := Cipher (State, This.Round_Keys);
 
-         return [Result (1, 1),
-                 Result (1, 2),
-                 Result (1, 3),
-                 Result (1, 4),
-                 Result (2, 1),
-                 Result (2, 2),
-                 Result (2, 3),
-                 Result (2, 4),
-                 Result (3, 1),
-                 Result (3, 2),
-                 Result (3, 3),
-                 Result (3, 4),
-                 Result (4, 1),
-                 Result (4, 2),
-                 Result (4, 3),
-                 Result (4, 4)];
+         return [Result (1, 1), Result (1, 2), Result (1, 3), Result (1, 4),
+                 Result (2, 1), Result (2, 2), Result (2, 3), Result (2, 4),
+                 Result (3, 1), Result (3, 2), Result (3, 3), Result (3, 4),
+                 Result (4, 1), Result (4, 2), Result (4, 3), Result (4, 4)];
       end Xcrypt;
 
    end CTR;
