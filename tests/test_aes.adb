@@ -12,6 +12,12 @@ package body Test_AES is
 
       Ahven.Framework.Add_Test_Routine (Test, Test_AES_ECB_128_Encrypt_Test_Vector_1'Access,
          "AES/ECB-128 Encrypt Test Vector 1");
+      Ahven.Framework.Add_Test_Routine (Test, Test_AES_ECB_128_Encrypt_Test_Vector_2'Access,
+         "AES/ECB-128 Encrypt Test Vector 2");
+      Ahven.Framework.Add_Test_Routine (Test, Test_AES_ECB_128_Encrypt_Test_Vector_3'Access,
+         "AES/ECB-128 Encrypt Test Vector 3");
+      Ahven.Framework.Add_Test_Routine (Test, Test_AES_ECB_128_Encrypt_Test_Vector_4'Access,
+         "AES/ECB-128 Encrypt Test Vector 4");
 
       Ahven.Framework.Add_Test_Routine (Test, Test_AES128_Encrypt_CTR_1'Access,
          "AES128 Encrypt CTR 1");
@@ -22,6 +28,9 @@ package body Test_AES is
    package AES128 is new AES
       (u8, Positive, Bytes, Interfaces.Shift_Left, Interfaces.Shift_Right);
 
+   ---------------------------------------------
+   --  Test_AES_ECB_128_Encrypt_Test_Vector_1 --
+   ---------------------------------------------
    procedure Test_AES_ECB_128_Encrypt_Test_Vector_1 is
       Key : constant Bytes :=
         [16#2b#, 16#7e#, 16#15#, 16#16#, 16#28#, 16#ae#, 16#d2#, 16#a6#,
@@ -39,6 +48,69 @@ package body Test_AES is
    begin
       Assert (Result = Expected, "bytes mismatch");
    end Test_AES_ECB_128_Encrypt_Test_Vector_1;
+
+   ---------------------------------------------
+   --  Test_AES_ECB_128_Encrypt_Test_Vector_2 --
+   ---------------------------------------------
+   procedure Test_AES_ECB_128_Encrypt_Test_Vector_2 is
+      Key : constant Bytes :=
+        [16#2b#, 16#7e#, 16#15#, 16#16#, 16#28#, 16#ae#, 16#d2#, 16#a6#,
+         16#ab#, 16#f7#, 16#15#, 16#88#, 16#09#, 16#cf#, 16#4f#, 16#3c#];
+      Input : constant Bytes :=
+        [16#ae#, 16#2d#, 16#8a#, 16#57#, 16#1e#, 16#03#, 16#ac#, 16#9c#,
+         16#9e#, 16#b7#, 16#6f#, 16#ac#, 16#45#, 16#af#, 16#8e#, 16#51#];
+      Expected : constant Bytes :=
+        [16#f5#, 16#d3#, 16#d5#, 16#85#, 16#03#, 16#b9#, 16#69#, 16#9d#,
+         16#e7#, 16#85#, 16#89#, 16#5a#, 16#96#, 16#fd#, 16#ba#, 16#af#];
+
+      package AES128_ECB1 is new AES128.ECB (Key);
+      Buf1 : AES128_ECB1.Buffer;
+      Result : constant Bytes := Buf1.Encrypt (Input);
+   begin
+      Assert (Result = Expected, "bytes mismatch");
+   end Test_AES_ECB_128_Encrypt_Test_Vector_2;
+
+   ---------------------------------------------
+   --  Test_AES_ECB_128_Encrypt_Test_Vector_3 --
+   ---------------------------------------------
+   procedure Test_AES_ECB_128_Encrypt_Test_Vector_3 is
+      Key : constant Bytes :=
+        [16#2b#, 16#7e#, 16#15#, 16#16#, 16#28#, 16#ae#, 16#d2#, 16#a6#,
+         16#ab#, 16#f7#, 16#15#, 16#88#, 16#09#, 16#cf#, 16#4f#, 16#3c#];
+      Input : constant Bytes :=
+        [16#30#, 16#c8#, 16#1c#, 16#46#, 16#a3#, 16#5c#, 16#e4#, 16#11#,
+         16#e5#, 16#fb#, 16#c1#, 16#19#, 16#1a#, 16#0a#, 16#52#, 16#ef#];
+      Expected : constant Bytes :=
+        [16#43#, 16#b1#, 16#cd#, 16#7f#, 16#59#, 16#8e#, 16#ce#, 16#23#,
+         16#88#, 16#1b#, 16#00#, 16#e3#, 16#ed#, 16#03#, 16#06#, 16#88#];
+
+      package AES128_ECB1 is new AES128.ECB (Key);
+      Buf1 : AES128_ECB1.Buffer;
+      Result : constant Bytes := Buf1.Encrypt (Input);
+   begin
+      Assert (Result = Expected, "bytes mismatch");
+   end Test_AES_ECB_128_Encrypt_Test_Vector_3;
+
+   ---------------------------------------------
+   --  Test_AES_ECB_128_Encrypt_Test_Vector_4 --
+   ---------------------------------------------
+   procedure Test_AES_ECB_128_Encrypt_Test_Vector_4 is
+      Key : constant Bytes :=
+        [16#2b#, 16#7e#, 16#15#, 16#16#, 16#28#, 16#ae#, 16#d2#, 16#a6#,
+         16#ab#, 16#f7#, 16#15#, 16#88#, 16#09#, 16#cf#, 16#4f#, 16#3c#];
+      Input : constant Bytes :=
+        [16#f6#, 16#9f#, 16#24#, 16#45#, 16#df#, 16#4f#, 16#9b#, 16#17#,
+         16#ad#, 16#2b#, 16#41#, 16#7b#, 16#e6#, 16#6c#, 16#37#, 16#10#];
+      Expected : constant Bytes :=
+        [16#7b#, 16#0c#, 16#78#, 16#5e#, 16#27#, 16#e8#, 16#ad#, 16#3f#,
+         16#82#, 16#23#, 16#20#, 16#71#, 16#04#, 16#72#, 16#5d#, 16#d4#];
+
+      package AES128_ECB1 is new AES128.ECB (Key);
+      Buf1 : AES128_ECB1.Buffer;
+      Result : constant Bytes := Buf1.Encrypt (Input);
+   begin
+      Assert (Result = Expected, "bytes mismatch");
+   end Test_AES_ECB_128_Encrypt_Test_Vector_4;
 
    procedure Test_AES128_Encrypt_CTR_1 is
       Key : constant Bytes :=
