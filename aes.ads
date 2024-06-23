@@ -65,9 +65,9 @@ private
      [16#01#, 16#02#, 16#04#, 16#08#, 16#10#, 16#20#, 16#40#, 16#80#, 16#1b#, 16#36#];
 
    function Key_Expansion (Key : T_Array) return Round_Key_Array;
-   function Add_Round_Key (State : Word_Array; Round_Key : Word_Array) return Word_Array;
    function Sub_Bytes (State : Word_Array) return Word_Array;
    function Shift_Rows (State : Word_Array) return Word_Array;
    function Mix_Columns (State : Word_Array) return Word_Array;
+   function Add_Round_Key (State : Word_Array; Round_Key : Word_Array) return Word_Array;
 
 end AES;

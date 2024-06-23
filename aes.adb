@@ -67,20 +67,6 @@ package body AES is
       return Result;
    end Key_Expansion;
 
-   --  The Add_Round_Key function adds the round key to the state.
-   --  The round key is added to the state by an XOR function.
-   function Add_Round_Key (State : Word_Array; Round_Key : Word_Array) return Word_Array is
-      Result : Word_Array;
-   begin
-      for I in Word_Array'Range (1) loop
-         for J in Word_Array'Range (2) loop
-            Result (I, J) := State (I, J) xor Round_Key (I, J);
-         end loop;
-      end loop;
-
-      return Result;
-   end Add_Round_Key;
-
    --  The Sub_Bytes function substitutes the values in the state matrix with
    --  values in an S-box.
    function Sub_Bytes (State : Word_Array) return Word_Array is
@@ -139,5 +125,19 @@ package body AES is
 
       return Result;
    end Mix_Columns;
+
+   --  The Add_Round_Key function adds the round key to the state.
+   --  The round key is added to the state by an XOR function.
+   function Add_Round_Key (State : Word_Array; Round_Key : Word_Array) return Word_Array is
+      Result : Word_Array;
+   begin
+      for I in Word_Array'Range (1) loop
+         for J in Word_Array'Range (2) loop
+            Result (I, J) := State (I, J) xor Round_Key (I, J);
+         end loop;
+      end loop;
+
+      return Result;
+   end Add_Round_Key;
 
 end AES;
