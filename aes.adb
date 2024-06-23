@@ -13,11 +13,12 @@ package body AES is
       end Initialize;
 
       function Xcrypt (This : in out Buffer; Input : T_Array) return T_Array is
-         State, Result : Word_Array;
+         function To_Word_Array is new Ada.Unchecked_Conversion (T_Array, Word_Array);
+         pragma Inline (To_Word_Array);
 
-         function Convert is new Ada.Unchecked_Conversion (T_Array, Word_Array);
+         State, Result : Word_Array;
       begin
-         State := Convert (Input);
+         State := To_Word_Array (Input);
          Result := Cipher (State, This.Round_Keys);
 
          return [Result (1, 1), Result (1, 2), Result (1, 3), Result (1, 4),
@@ -28,22 +29,22 @@ package body AES is
 
    end CTR;
 
-   --  This function creates 10 incremental round keys.
+   --  This function creates ten incremental round keys.
    --  The round keys are used in each round to en-/decrypt the states.
    function Key_Expansion (Key : T_Array) return Round_Key_Array is
       Result : Round_Key_Array :=
         --  Initialise the first round by using the key itself.
-        [0 => [1 => [Key (1), Key (2), Key (3), Key (4)],
-               2 => [Key (5), Key (6), Key (7), Key (8)],
-               3 => [Key (9), Key (10), Key (11), Key (12)],
+        [0 => [1 => [Key (1),  Key (2),  Key (3),  Key (4)],
+               2 => [Key (5),  Key (6),  Key (7),  Key (8)],
+               3 => [Key (9),  Key (10), Key (11), Key (12)],
                4 => [Key (13), Key (14), Key (15), Key (16)]],
          1 .. 10 => [1 .. 4 => [1 .. 4 => 0]]];
    begin
       --  All other round keys are found from the previous round keys.
       for I in 1 .. Round_Key_Array'Last (1) loop
-         --  RotWord -> SubWord (using Sbox) -> Rcon
          --  Word 1
          Result (I, 1, 1) := Result (I - 1, 1, 1) xor
+            --  RotWord -> SubWord (using Sbox) -> Rcon
             Sbox (T_Index'First + T'Pos (Result (I - 1, 4, 2))) xor Rcon (T_Index (I));
          Result (I, 1, 2) := Result (I - 1, 1, 2) xor
             Sbox (T_Index'First + T'Pos (Result (I - 1, 4, 3)));
@@ -129,7 +130,7 @@ package body AES is
               4 => [State (4, 1), State (1, 2), State (2, 3), State (3, 4)]];
    end Permute;
 
-   --  The Mix_Columns functions mixes the rows of the transposed matrix.
+   --  The Mix_Columns functions mixes the rows of the transposed matrix (-> columns).
    function Mix_Columns (State : Word_Array) return Word_Array is
       function Xtime (X : T) return T is
          (Shift_Left (X, 1) xor ((Shift_Right (X, 7) and 1) * 16#1b#));
@@ -138,7 +139,7 @@ package body AES is
       Result : Word_Array := State;
       A, B, C : T;
    begin
-      for I in Word_Array'Range loop
+      for I in Word_Array'Range (1) loop
          A := Result (I, 1);
          B := Result (I, 1) xor Result (I, 2) xor Result (I, 3) xor Result (I, 4);
 
@@ -163,7 +164,7 @@ package body AES is
    end Mix_Columns;
 
    --  The Add_Round_Key function adds the round key to the state.
-   --  The round key is added to the state by an XOR function.
+   --  The round key is added to the state by an xor function.
    function Add_Round_Key (State : Word_Array; Round_Key : Word_Array) return Word_Array is
       Result : Word_Array;
    begin
