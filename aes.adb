@@ -158,14 +158,8 @@ package body AES is
       Result : Word_Array;
 
       function Xtime (X : T) return T is
-         B7 : T := 16#80#; -- Test: if the high bit is set
-         Temp : T := Shift_Left (X, 1);
-      begin
-         if (B7 and X) = B7 then
-            Temp := @ xor 16#1b#; -- x^8 + x^4 + x^3 + x + 1
-         end if;
-         return Temp;
-      end Xtime;
+         (Shift_Left (X, 1) xor ((Shift_Right (X, 7) and 1) * 16#1b#));
+      pragma Inline (Xtime);
 
       function Mul (A, B : T) return T is
          Result : T;
