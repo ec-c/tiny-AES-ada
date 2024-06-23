@@ -95,4 +95,18 @@ package body AES is
       return Result;
    end Sub_Bytes;
 
+   --  The Shift_Rows function shifts the rows in the state to the left.
+   --  Each row is shifted with by different offset:
+   --    * first row: not shifted
+   --    * second row: shifted to the left by 1 byte
+   --    * third row: shifted to the left by 2 bytes
+   --    * fourth row: shifted to the left by 3 bytes
+   function Shift_Rows (State : Word_Array) return Word_Array is
+   begin
+      return [1 => [State (1, 1), State (1, 2), State (1, 3), State (1, 4)],
+              2 => [State (2, 2), State (2, 3), State (2, 4), State (2, 1)],
+              3 => [State (3, 3), State (3, 4), State (3, 1), State (3, 2)],
+              4 => [State (4, 4), State (4, 1), State (4, 2), State (4, 3)]];
+   end Shift_Rows;
+
 end AES;
