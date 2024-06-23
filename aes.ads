@@ -24,7 +24,7 @@ is
       overriding
       procedure Initialize (This : in out Buffer);
 
-      function Xcrypt (This : in out Buffer; Buf : T_Array) return T_Array;
+      function Xcrypt (This : in out Buffer; Input : T_Array) return T_Array;
    private
 
       type Buffer is new Ada.Finalization.Limited_Controlled with

@@ -17,25 +17,25 @@ package body AES is
             4 => [Iv (13), Iv (14), Iv (15), Iv (16)]];
       end Initialize;
 
-      function Xcrypt (This : in out Buffer; Buf : T_Array) return T_Array is
+      function Xcrypt (This : in out Buffer; Input : T_Array) return T_Array is
          Result : Word_Array := Cipher (This.State, This.Round_Keys);
       begin
-         return [Buf (1)  xor Result (1, 1),
-                 Buf (2)  xor Result (1, 2),
-                 Buf (3)  xor Result (1, 3),
-                 Buf (4)  xor Result (1, 4),
-                 Buf (5)  xor Result (2, 1),
-                 Buf (6)  xor Result (2, 2),
-                 Buf (7)  xor Result (2, 3),
-                 Buf (8)  xor Result (2, 4),
-                 Buf (9)  xor Result (3, 1),
-                 Buf (10) xor Result (3, 2),
-                 Buf (11) xor Result (3, 3),
-                 Buf (12) xor Result (3, 4),
-                 Buf (13) xor Result (4, 1),
-                 Buf (14) xor Result (4, 2),
-                 Buf (15) xor Result (4, 3),
-                 Buf (16) xor Result (4, 4)];
+         return [Input (1)  xor Result (1, 1),
+                 Input (2)  xor Result (1, 2),
+                 Input (3)  xor Result (1, 3),
+                 Input (4)  xor Result (1, 4),
+                 Input (5)  xor Result (2, 1),
+                 Input (6)  xor Result (2, 2),
+                 Input (7)  xor Result (2, 3),
+                 Input (8)  xor Result (2, 4),
+                 Input (9)  xor Result (3, 1),
+                 Input (10) xor Result (3, 2),
+                 Input (11) xor Result (3, 3),
+                 Input (12) xor Result (3, 4),
+                 Input (13) xor Result (4, 1),
+                 Input (14) xor Result (4, 2),
+                 Input (15) xor Result (4, 3),
+                 Input (16) xor Result (4, 4)];
       end Xcrypt;
 
    end CTR;
