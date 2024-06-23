@@ -1,5 +1,3 @@
-with Ada.Text_IO;
-
 package body AES is
 
    --  Symmetrical operation: same procedure for encrypting as for decrypting.
@@ -114,21 +112,19 @@ package body AES is
 
       Result : Word_Array := State;
    begin
-      Ada.Text_IO.Put_Line (Result'Image);
       --  Add the first round key to the state before starting the rounds.
       Result := Add_Round_Key (Result, Get_Round_Key (0));
 
       for I in 1 .. 9 loop
          Result := Sub_Bytes (Result);
-         Ada.Text_IO.Put_Line (Result'Image);
-         Result := Shift_Rows (Result);
+         Result := Permute (Result);
          Result := Mix_Columns (Result);
          Result := Add_Round_Key (Result, Get_Round_Key (I));
       end loop;
 
       --  Last round
       Result := Sub_Bytes (Result);
-      Result := Shift_Rows (Result);
+      Result := Permute (Result);
       Result := Add_Round_Key (Result, Get_Round_Key (10));
 
       return Result;
@@ -148,46 +144,72 @@ package body AES is
       return Result;
    end Sub_Bytes;
 
-   --  The Shift_Rows function shifts the rows in the state to the left.
-   --  Each row is shifted with by different offset:
-   --    * first row: not shifted
-   --    * second row: shifted to the left by 1 byte
-   --    * third row: shifted to the left by 2 bytes
-   --    * fourth row: shifted to the left by 3 bytes
-   function Shift_Rows (State : Word_Array) return Word_Array is
+   --  The Permute function shifts the rows to the left and transposes the matrix.
+   function Permute (State : Word_Array) return Word_Array is
    begin
-      return [1 => [State (1, 1), State (1, 2), State (1, 3), State (1, 4)],
-              2 => [State (2, 2), State (2, 3), State (2, 4), State (2, 1)],
-              3 => [State (3, 3), State (3, 4), State (3, 1), State (3, 2)],
-              4 => [State (4, 4), State (4, 1), State (4, 2), State (4, 3)]];
-   end Shift_Rows;
+      return [1 => [State (1, 1), State (2, 2), State (3, 3), State (4, 4)],
+              2 => [State (2, 1), State (3, 2), State (4, 3), State (1, 4)],
+              3 => [State (3, 1), State (4, 2), State (1, 3), State (2, 4)],
+              4 => [State (4, 1), State (1, 2), State (2, 3), State (3, 4)]];
+   end Permute;
 
-   --  The Mix_Columns functions mixes the columns of the state matrix.
-   --  TODO: rename variables
+   --  The Multiplicate functions mixes the rows of the transposed matrix.
    function Mix_Columns (State : Word_Array) return Word_Array is
-      function Xtime (X : T) return T is
-         (Shift_Left (X, 1) xor ((Shift_Right (X, 7) and 1) * 16#1b#));
-      pragma Inline (Xtime);
-
       Result : Word_Array;
-      Tmp, Tm, T1 : T;
+
+      function Xtime (X : T) return T is
+         B7 : T := 16#80#; -- Test: if the high bit is set
+         Temp : T := Shift_Left (X, 1);
+      begin
+         if (B7 and X) = B7 then
+            Temp := @ xor 16#1b#; -- x^8 + x^4 + x^3 + x + 1
+         end if;
+         return Temp;
+      end Xtime;
+
+      function Mul (A, B : T) return T is
+         Result : T;
+         A1 : T := A;
+         B1 : T := B;
+      begin
+         for I in T'Range loop
+            --  add
+            if (B1 and 1) /= 0 then
+               Result := @ xor A1;
+            end if;
+
+            A1 := Xtime (A1);
+            B1 := Shift_Right (B1, 1);
+         end loop;
+         return Result;
+      end Mul;
+
+      S0, S1, S2, S3, A, B : T;
    begin
       for I in Word_Array'Range loop
-         T1 := State (I, 1);
-         Tmp := State (I, 1) xor State (I, 2) xor State (I, 3) xor State (I, 4);
-         Tm := State (I, 1) xor State (I, 2);
+         S0 := Mul (16#02#, State (I, 1));
+         S1 := Mul (16#03#, State (I, 2));
+         A := S0 xor S1;
+         B := State (I, 3) xor State (I, 4);
+         Result (I, 1) := A xor B;
 
-         Tm := State (I, 2) xor State (I, 3);
-         Tm := Xtime (Tm);
-         Result (I, 2) := @ xor Tm xor Tmp;
+         S1 := Mul (16#02#, State (I, 2));
+         S2 := Mul (16#03#, State (I, 3));
+         A := State (I, 1) xor S1;
+         B := S2 xor State (I, 4);
+         Result (I, 2) := A xor B;
 
-         Tm := State (I, 3) xor State (I, 4);
-         Tm := Xtime (Tm);
-         Result (I, 3) := @ xor Tm xor Tmp;
+         S2 := Mul (16#02#, State (I, 3));
+         S3 := Mul (16#03#, State (I, 4));
+         A := State (I, 1) xor State (I, 2);
+         B := S2 xor S3;
+         Result (I, 3) := A xor B;
 
-         Tm := State (I, 4) xor T1;
-         Tm := Xtime (Tm);
-         Result (I, 4) := @ xor Tm xor Tmp;
+         S0 := Mul (16#03#, State (I, 1));
+         S3 := Mul (16#02#, State (I, 4));
+         A := S0 xor State (I, 2);
+         B := State (I, 3) xor S3;
+         Result (I, 4) := A xor B;
       end loop;
 
       return Result;

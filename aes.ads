@@ -67,7 +67,7 @@ private
 
    function Cipher (State : Word_Array; Round_Keys : Round_Key_Array) return Word_Array;
    function Sub_Bytes (State : Word_Array) return Word_Array;
-   function Shift_Rows (State : Word_Array) return Word_Array;
+   function Permute (State : Word_Array) return Word_Array;
    function Mix_Columns (State : Word_Array) return Word_Array;
    function Add_Round_Key (State : Word_Array; Round_Key : Word_Array) return Word_Array;
 
