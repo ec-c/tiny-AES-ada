@@ -17,9 +17,9 @@ package Test_AES is
    procedure Test_AES128_ECB_Encrypt_Test_Vector_3;
    procedure Test_AES128_ECB_Encrypt_Test_Vector_4;
 
-   procedure Test_AES_CTR_128_Test_Vector_1;
-   procedure Test_AES_CTR_128_Test_Vector_2;
-   procedure Test_AES_CTR_128_Test_Vector_3;
-   procedure Test_AES_CTR_128_Test_Vector_4;
+   procedure Test_AES128_CTR_Test_Vector_1;
+   procedure Test_AES128_CTR_Test_Vector_2;
+   procedure Test_AES128_CTR_Test_Vector_3;
+   procedure Test_AES128_CTR_Test_Vector_4;
 
 end Test_AES;

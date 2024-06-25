@@ -19,13 +19,13 @@ package body Test_AES is
       Ahven.Framework.Add_Test_Routine (Test, Test_AES128_ECB_Encrypt_Test_Vector_4'Access,
          "AES128-ECB Encrypt Test Vector 4");
 
-      Ahven.Framework.Add_Test_Routine (Test, Test_AES_CTR_128_Test_Vector_1'Access,
+      Ahven.Framework.Add_Test_Routine (Test, Test_AES128_CTR_Test_Vector_1'Access,
          "AES128-CTR Test Vector 1");
-      Ahven.Framework.Add_Test_Routine (Test, Test_AES_CTR_128_Test_Vector_2'Access,
+      Ahven.Framework.Add_Test_Routine (Test, Test_AES128_CTR_Test_Vector_2'Access,
          "AES128-CTR Test Vector 2");
-      Ahven.Framework.Add_Test_Routine (Test, Test_AES_CTR_128_Test_Vector_3'Access,
+      Ahven.Framework.Add_Test_Routine (Test, Test_AES128_CTR_Test_Vector_3'Access,
          "AES128-CTR Test Vector 3");
-      Ahven.Framework.Add_Test_Routine (Test, Test_AES_CTR_128_Test_Vector_4'Access,
+      Ahven.Framework.Add_Test_Routine (Test, Test_AES128_CTR_Test_Vector_4'Access,
          "AES128-CTR Test Vector 4");
    end Initialize;
 
@@ -116,10 +116,10 @@ package body Test_AES is
       Assert (Result = Expected, "bytes mismatch");
    end Test_AES128_ECB_Encrypt_Test_Vector_4;
 
-   -------------------------------------
-   --  Test_AES_CTR_128_Test_Vector_1 --
-   -------------------------------------
-   procedure Test_AES_CTR_128_Test_Vector_1 is
+   ------------------------------------
+   --  Test_AES128_CTR_Test_Vector_1 --
+   ------------------------------------
+   procedure Test_AES128_CTR_Test_Vector_1 is
       Key : constant Bytes :=
         [16#2b#, 16#7e#, 16#15#, 16#16#, 16#28#, 16#ae#, 16#d2#, 16#a6#,
          16#ab#, 16#f7#, 16#15#, 16#88#, 16#09#, 16#cf#, 16#4f#, 16#3c#];
@@ -138,12 +138,12 @@ package body Test_AES is
    begin
       Assert (Buffer.Xcrypt (A) = B, "enc. mismatched");
       Assert (Buffer.Xcrypt (B) = A, "dec. mismatched");
-   end Test_AES_CTR_128_Test_Vector_1;
+   end Test_AES128_CTR_Test_Vector_1;
 
-   -------------------------------------
-   --  Test_AES_CTR_128_Test_Vector_2 --
-   -------------------------------------
-   procedure Test_AES_CTR_128_Test_Vector_2 is
+   ------------------------------------
+   --  Test_AES128_CTR_Test_Vector_2 --
+   ------------------------------------
+   procedure Test_AES128_CTR_Test_Vector_2 is
       Key : constant Bytes :=
         [16#2b#, 16#7e#, 16#15#, 16#16#, 16#28#, 16#ae#, 16#d2#, 16#a6#,
          16#ab#, 16#f7#, 16#15#, 16#88#, 16#09#, 16#cf#, 16#4f#, 16#3c#];
@@ -157,17 +157,17 @@ package body Test_AES is
         [16#98#, 16#06#, 16#f6#, 16#6b#, 16#79#, 16#70#, 16#fd#, 16#ff#,
          16#86#, 16#17#, 16#18#, 16#7b#, 16#b9#, 16#ff#, 16#fd#, 16#ff#];
 
-      package AES128_CTR1 is new AES128.CTR (Key, Nonce);
-      Buffer : AES128_CTR1.Buffer;
+      package AES128_CTR is new AES128.CTR (Key, Nonce);
+      Buffer : AES128_CTR.Buffer;
    begin
       Assert (Buffer.Xcrypt (A) = B, "enc. mismatched");
       Assert (Buffer.Xcrypt (B) = A, "dec. mismatched");
-   end Test_AES_CTR_128_Test_Vector_2;
+   end Test_AES128_CTR_Test_Vector_2;
 
-   -------------------------------------
-   --  Test_AES_CTR_128_Test_Vector_3 --
-   -------------------------------------
-   procedure Test_AES_CTR_128_Test_Vector_3 is
+   ------------------------------------
+   --  Test_AES128_CTR_Test_Vector_3 --
+   ------------------------------------
+   procedure Test_AES128_CTR_Test_Vector_3 is
       Key : constant Bytes :=
         [16#2b#, 16#7e#, 16#15#, 16#16#, 16#28#, 16#ae#, 16#d2#, 16#a6#,
          16#ab#, 16#f7#, 16#15#, 16#88#, 16#09#, 16#cf#, 16#4f#, 16#3c#];
@@ -186,12 +186,12 @@ package body Test_AES is
    begin
       Assert (Buffer.Xcrypt (A) = B, "enc. mismatched");
       Assert (Buffer.Xcrypt (B) = A, "dec. mismatched");
-   end Test_AES_CTR_128_Test_Vector_3;
+   end Test_AES128_CTR_Test_Vector_3;
 
-   -------------------------------------
-   --  Test_AES_CTR_128_Test_Vector_4 --
-   -------------------------------------
-   procedure Test_AES_CTR_128_Test_Vector_4 is
+   ------------------------------------
+   --  Test_AES128_CTR_Test_Vector_4 --
+   ------------------------------------
+   procedure Test_AES128_CTR_Test_Vector_4 is
       Key : constant Bytes :=
         [16#2b#, 16#7e#, 16#15#, 16#16#, 16#28#, 16#ae#, 16#d2#, 16#a6#,
          16#ab#, 16#f7#, 16#15#, 16#88#, 16#09#, 16#cf#, 16#4f#, 16#3c#];
@@ -210,6 +210,6 @@ package body Test_AES is
    begin
       Assert (Buffer.Xcrypt (A) = B, "enc. mismatched");
       Assert (Buffer.Xcrypt (B) = A, "dec. mismatched");
-   end Test_AES_CTR_128_Test_Vector_4;
+   end Test_AES128_CTR_Test_Vector_4;
 
 end Test_AES;
