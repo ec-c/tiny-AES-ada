@@ -4,13 +4,10 @@ generic
    type T is mod <>;
    type T_Index is range <>;
    type T_Array is array (T_Index range <>) of T;
-   with function Shift_Left (Value : T; Amount : Natural) return T;
-   with function Shift_Right (Value : T; Amount : Natural) return T;
 package AES with
    SPARK_Mode,
    Pure
 is
-
    type Round_Key_Array is private;
    type Word_Array is private;
 
@@ -54,9 +51,14 @@ is
 
 private
 
+   function Shift_Left (Value : T; Amount : Natural) return T
+      with Import, Convention => Intrinsic;
+
+   function Shift_Right (Value : T; Amount : Natural) return T
+      with Import, Convention => Intrinsic;
+
    --  AES128 -> 10 rounds * (4 * 4) bytes = 128 bit
    type Round_Key_Array is array (0 .. 10, 1 .. 4, 1 .. 4) of T;
-
    type Word_Array is array (1 .. 4, 1 .. 4) of T;
 
    Sbox : constant T_Array (1 .. 256) :=

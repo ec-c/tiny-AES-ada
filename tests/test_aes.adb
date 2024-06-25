@@ -29,8 +29,7 @@ package body Test_AES is
          "AES128-CTR Test Vector 4");
    end Initialize;
 
-   package AES128 is new AES
-      (u8, Positive, Bytes, Interfaces.Shift_Left, Interfaces.Shift_Right);
+   package AES128 is new AES (u8, Positive, Bytes);
 
    --------------------------------------------
    --  Test_AES128_ECB_Encrypt_Test_Vector_1 --
