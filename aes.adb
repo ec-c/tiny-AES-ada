@@ -9,7 +9,7 @@ package body AES is
       end Initialize;
 
       function Encrypt (This : in out Buffer; Data : T_Array) return T_Array is
-         State : Word_Array :=
+         State : constant Word_Array :=
            [1 => [Data (1),  Data (2),  Data (3),  Data (4)],
             2 => [Data (5),  Data (6),  Data (7),  Data (8)],
             3 => [Data (9),  Data (10), Data (11), Data (12)],
@@ -33,7 +33,7 @@ package body AES is
       function Xcrypt (This : in out Buffer; Data : T_Array) return T_Array is
          package AES128_ECB is new ECB (Key);
          Buffer    : AES128_ECB.Buffer;
-         Keystream : T_Array := Buffer.Encrypt (Nonce);
+         Keystream : constant T_Array := Buffer.Encrypt (Nonce);
       begin
          return [Data (1)  xor Keystream (1),
                  Data (2)  xor Keystream (2),
@@ -119,6 +119,7 @@ package body AES is
       Result := Add_Round_Key (Result, Get_Round_Key (0));
 
       for I in 1 .. 9 loop
+         pragma Loop_Optimize (Ivdep, Unroll);
          Result := Sub_Bytes (Result);
          Result := Permute (Result);
          Result := Mix_Columns (Result);
@@ -139,7 +140,9 @@ package body AES is
       Result : Word_Array;
    begin
       for I in Word_Array'Range (1) loop
+         pragma Loop_Optimize (Ivdep, Unroll);
          for J in Word_Array'Range (2) loop
+            pragma Loop_Optimize (Ivdep, Unroll);
             Result (I, J) := Sbox (T_Index'First + T'Pos (State (I, J)));
          end loop;
       end loop;
@@ -166,6 +169,8 @@ package body AES is
       A, B, C : T;
    begin
       for I in Word_Array'Range (1) loop
+         pragma Loop_Optimize (Ivdep, Unroll);
+
          A := Result (I, 1);
          B := Result (I, 1) xor Result (I, 2) xor Result (I, 3) xor Result (I, 4);
 
@@ -195,7 +200,9 @@ package body AES is
       Result : Word_Array;
    begin
       for I in Word_Array'Range (1) loop
+         pragma Loop_Optimize (Ivdep, Unroll);
          for J in Word_Array'Range (2) loop
+            pragma Loop_Optimize (Ivdep, Unroll);
             Result (I, J) := State (I, J) xor Round_Key (I, J);
          end loop;
       end loop;
