@@ -120,23 +120,23 @@ package body AES is
 
       for I in 1 .. 9 loop
          pragma Loop_Optimize (Ivdep, Unroll);
-         Result := Sub_Bytes (Result);
+         Result := Substitute (Result);
          Result := Permute (Result);
-         Result := Mix_Columns (Result);
+         Result := Multiplicate (Result);
          Result := Add_Round_Key (Result, Get_Round_Key (I));
       end loop;
 
       --  Last round
-      Result := Sub_Bytes (Result);
+      Result := Substitute (Result);
       Result := Permute (Result);
       Result := Add_Round_Key (Result, Get_Round_Key (10));
 
       return Result;
    end Cipher;
 
-   --  The Sub_Bytes function substitutes the values in the state matrix with
+   --  The Substitute function substitutes the values in the state matrix with
    --  values in an S-box.
-   function Sub_Bytes (State : Word_Array) return Word_Array is
+   function Substitute (State : Word_Array) return Word_Array is
       Result : Word_Array;
    begin
       for I in Word_Array'Range (1) loop
@@ -148,7 +148,7 @@ package body AES is
       end loop;
 
       return Result;
-   end Sub_Bytes;
+   end Substitute;
 
    --  The Permute function shifts the rows to the left and transposes the matrix.
    function Permute (State : Word_Array) return Word_Array is
@@ -159,8 +159,8 @@ package body AES is
               4 => [State (4, 1), State (1, 2), State (2, 3), State (3, 4)]];
    end Permute;
 
-   --  The Mix_Columns functions mixes the rows of the transposed matrix (-> columns).
-   function Mix_Columns (State : Word_Array) return Word_Array is
+   --  The Multiplicate functions mixes the rows of the transposed matrix (-> columns).
+   function Multiplicate (State : Word_Array) return Word_Array is
       function Xtime (X : T) return T is
          (Shift_Left (X, 1) xor ((Shift_Right (X, 7) and 1) * 16#1b#));
       pragma Inline (Xtime);
@@ -192,7 +192,7 @@ package body AES is
       end loop;
 
       return Result;
-   end Mix_Columns;
+   end Multiplicate;
 
    --  The Add_Round_Key function adds the round key to the state.
    --  The round key is added to the state by an xor function.
