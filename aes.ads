@@ -33,18 +33,19 @@ is
    end ECB;
 
    generic
+      type Counter_T is mod <>;
       Key, Nonce : T_Array;
    package CTR with
       SPARK_Mode
    is
       type Buffer is tagged limited private;
 
-      function Xcrypt (This : in out Buffer; Data : T_Array) return T_Array;
+      function Xcrypt (This : in out Buffer; Data : T_Array; Counter : Counter_T) return T_Array;
    private
 
       type Buffer is
          tagged limited record
-            Counter : Integer;
+            Counter : Counter_T;
          end record;
 
    end CTR;

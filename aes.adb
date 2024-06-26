@@ -30,7 +30,7 @@ package body AES is
    --  Note that an IV/nonce should never be reused with the same key.
    package body CTR is
 
-      function Xcrypt (This : in out Buffer; Data : T_Array) return T_Array is
+      function Xcrypt (This : in out Buffer; Data : T_Array; Counter : Counter_T) return T_Array is
          package AES128_ECB is new ECB (Key);
          Buffer    : AES128_ECB.Buffer;
          Keystream : constant T_Array := Buffer.Encrypt (Nonce);

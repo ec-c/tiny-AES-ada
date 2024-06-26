@@ -9,6 +9,8 @@ package Test_AES is
    subtype u8 is Interfaces.Unsigned_8 range Interfaces.Unsigned_8'Range;
    type Bytes is array (Positive range <>) of aliased u8;
 
+   subtype u64 is Interfaces.Unsigned_64 range Interfaces.Unsigned_64'Range;
+
    overriding
    procedure Initialize (Test : in out Test_T);
 
