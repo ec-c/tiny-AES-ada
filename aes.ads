@@ -34,6 +34,7 @@ is
 
    generic
       type Counter_T is mod <>;
+      with function "+" (Nonce : T_Array; Value : Counter_T) return T_Array;
       Key, Nonce : T_Array;
    package CTR with
       SPARK_Mode
