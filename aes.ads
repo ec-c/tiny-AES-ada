@@ -38,6 +38,8 @@ is
    package CTR with
       SPARK_Mode
    is
+      package AES128_ECB is new ECB (Key);
+
       type Buffer is tagged limited private;
 
       function Xcrypt (This : in out Buffer; Data : T_Array; Counter : Counter_T) return T_Array;
@@ -45,7 +47,7 @@ is
 
       type Buffer is
          tagged limited record
-            Counter : Counter_T;
+            Buffer  : AES128_ECB.Buffer;
          end record;
 
    end CTR;
