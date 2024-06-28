@@ -11,6 +11,9 @@ is
    type Round_Key_Array is private;
    type Word_Array is private;
 
+   -----------
+   --  ECB  --
+   -----------
    generic
       Key : T_Array;
    package ECB with
@@ -32,6 +35,9 @@ is
 
    end ECB;
 
+   -----------
+   --  CTR  --
+   -----------
    generic
       type Counter_T is mod <>;
       with function "+" (Nonce : T_Array; Value : Counter_T) return T_Array;
@@ -43,23 +49,22 @@ is
 
       type Buffer is tagged limited private;
 
-      function Xcrypt (This : in out Buffer; Data : T_Array; Counter : Counter_T) return T_Array;
+      function Xcrypt
+        (This   : in out Buffer;
+        Data    : T_Array;
+        Counter : Counter_T)
+      return T_Array;
+
    private
 
       type Buffer is
          tagged limited record
-            Buffer  : AES128_ECB.Buffer;
+            Buffer : AES128_ECB.Buffer;
          end record;
 
    end CTR;
 
 private
-
-   function Shift_Left (Value : T; Amount : Natural) return T
-      with Import, Convention => Intrinsic;
-
-   function Shift_Right (Value : T; Amount : Natural) return T
-      with Import, Convention => Intrinsic;
 
    --  AES128 -> 10 rounds * (4 * 4) bytes = 128 bit
    type Round_Key_Array is array (0 .. 10, 1 .. 4, 1 .. 4) of T;
@@ -101,14 +106,32 @@ private
       16#41#, 16#99#, 16#2d#, 16#0f#, 16#b0#, 16#54#, 16#bb#, 16#16#];
 
    Rcon : constant T_Array (1 .. 10) :=
-     [16#01#, 16#02#, 16#04#, 16#08#, 16#10#, 16#20#, 16#40#, 16#80#, 16#1b#, 16#36#];
+   --   1/6     2/7     3/8     4/9     5/10
+     [16#01#, 16#02#, 16#04#, 16#08#, 16#10#,
+      16#20#, 16#40#, 16#80#, 16#1b#, 16#36#];
 
    function Key_Expansion (Key : T_Array) return Round_Key_Array;
 
-   function Cipher (State : Word_Array; Round_Keys : Round_Key_Array) return Word_Array;
+   function Cipher
+     (State : Word_Array;
+      Round_Keys : Round_Key_Array)
+   return Word_Array;
+
    function Substitute (State : Word_Array) return Word_Array;
+
    function Permute (State : Word_Array) return Word_Array;
+
    function Multiplicate (State : Word_Array) return Word_Array;
-   function Add_Round_Key (State : Word_Array; Round_Key : Word_Array) return Word_Array;
+
+   function Add_Round_Key
+     (State    : Word_Array;
+     Round_Key : Word_Array)
+   return Word_Array;
+
+   function Shift_Left (Value : T; Amount : Natural) return T
+      with Import, Convention => Intrinsic;
+
+   function Shift_Right (Value : T; Amount : Natural) return T
+      with Import, Convention => Intrinsic;
 
 end AES;

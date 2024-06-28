@@ -30,7 +30,11 @@ package body AES is
    --  Note that an IV/nonce should never be reused with the same key.
    package body CTR is
 
-      function Xcrypt (This : in out Buffer; Data : T_Array; Counter : Counter_T) return T_Array is
+      function Xcrypt
+        (This    : in out Buffer;
+         Data    : T_Array;
+         Counter : Counter_T)
+      return T_Array is
          package AES128_ECB is new ECB (Key);
          Buffer    : AES128_ECB.Buffer;
          Keystream : constant T_Array := Buffer.Encrypt (Nonce + Counter);
@@ -102,7 +106,10 @@ package body AES is
    end Key_Expansion;
 
    --  The Cipher function is the main function that encrypts the plaintext.
-   function Cipher (State : Word_Array; Round_Keys : Round_Key_Array) return Word_Array is
+   function Cipher
+     (State      : Word_Array;
+      Round_Keys : Round_Key_Array)
+   return Word_Array is
       function Get_Round_Key (R : Natural) return Word_Array is
          K : constant Round_Key_Array := Round_Keys;
       begin
@@ -196,7 +203,10 @@ package body AES is
 
    --  The Add_Round_Key function adds the round key to the state.
    --  The round key is added to the state by an xor function.
-   function Add_Round_Key (State : Word_Array; Round_Key : Word_Array) return Word_Array is
+   function Add_Round_Key
+     (State     : Word_Array;
+      Round_Key : Word_Array)
+   return Word_Array is
       Result : Word_Array;
    begin
       for I in Word_Array'Range (1) loop
