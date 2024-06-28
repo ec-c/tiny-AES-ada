@@ -10,22 +10,38 @@ package body Test_AES is
    begin
       Set_Name (Test, "AES");
 
-      Ahven.Framework.Add_Test_Routine (Test, Test_AES128_ECB_Encrypt_Test_Vector_1'Access,
+      Ahven.Framework.Add_Test_Routine
+        (Test,
+         Test_AES128_ECB_Encrypt_Test_Vector_1'Access,
          "AES128-ECB Encrypt Test Vector 1");
-      Ahven.Framework.Add_Test_Routine (Test, Test_AES128_ECB_Encrypt_Test_Vector_2'Access,
+      Ahven.Framework.Add_Test_Routine
+        (Test,
+         Test_AES128_ECB_Encrypt_Test_Vector_2'Access,
          "AES128-ECB Encrypt Test Vector 2");
-      Ahven.Framework.Add_Test_Routine (Test, Test_AES128_ECB_Encrypt_Test_Vector_3'Access,
+      Ahven.Framework.Add_Test_Routine
+        (Test,
+         Test_AES128_ECB_Encrypt_Test_Vector_3'Access,
          "AES128-ECB Encrypt Test Vector 3");
-      Ahven.Framework.Add_Test_Routine (Test, Test_AES128_ECB_Encrypt_Test_Vector_4'Access,
+      Ahven.Framework.Add_Test_Routine
+        (Test,
+         Test_AES128_ECB_Encrypt_Test_Vector_4'Access,
          "AES128-ECB Encrypt Test Vector 4");
 
-      Ahven.Framework.Add_Test_Routine (Test, Test_AES128_CTR_Test_Vector_1'Access,
+      Ahven.Framework.Add_Test_Routine
+        (Test,
+         Test_AES128_CTR_Test_Vector_1'Access,
          "AES128-CTR Test Vector 1");
-      Ahven.Framework.Add_Test_Routine (Test, Test_AES128_CTR_Test_Vector_2'Access,
+      Ahven.Framework.Add_Test_Routine
+        (Test,
+         Test_AES128_CTR_Test_Vector_2'Access,
          "AES128-CTR Test Vector 2");
-      Ahven.Framework.Add_Test_Routine (Test, Test_AES128_CTR_Test_Vector_3'Access,
+      Ahven.Framework.Add_Test_Routine
+        (Test,
+         Test_AES128_CTR_Test_Vector_3'Access,
          "AES128-CTR Test Vector 3");
-      Ahven.Framework.Add_Test_Routine (Test, Test_AES128_CTR_Test_Vector_4'Access,
+      Ahven.Framework.Add_Test_Routine
+        (Test,
+         Test_AES128_CTR_Test_Vector_4'Access,
          "AES128-CTR Test Vector 4");
    end Initialize;
 
