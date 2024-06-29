@@ -1,3 +1,8 @@
+--  AES
+--  an Ada implementation of the AES encryption algorithm
+--
+--  block size: 128 bits; length size: 128 bits
+
 with Ada.Finalization;
 
 generic
