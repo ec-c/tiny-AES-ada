@@ -1,6 +1,6 @@
 with "ahven-2.8/gnat/ahven.gpr";
 
-project AES is
+project Tiny_AES_Ada is
    Ada_Compiler_Switches := External_As_List ("ADAFLAGS", " ");
    Ada_Compiler_Switches := Ada_Compiler_Switches & (
       "-Og" -- Optimize for debug
@@ -58,4 +58,4 @@ project AES is
       for Artifacts (".") use ("share");
    end Install;
 
-end AES;
+end Tiny_AES_Ada;
