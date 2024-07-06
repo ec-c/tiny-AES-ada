@@ -1,6 +1,6 @@
 with Ahven;
 
-with AES;
+with Tiny.AES;
 
 package body Test_AES is
    use Ahven;
@@ -45,7 +45,7 @@ package body Test_AES is
          "AES128-CTR Test Vector 4");
    end Initialize;
 
-   package AES128 is new AES (u8, Positive, Bytes);
+   package AES128 is new Tiny.AES (u8, Positive, Bytes);
 
    function Increment (Nonce : Bytes; Value : u64) return Bytes is
       use type u64;

@@ -9,7 +9,7 @@ generic
    type T is mod <>;
    type T_Index is range <>;
    type T_Array is array (T_Index range <>) of T;
-package AES with
+package Tiny.AES with
    SPARK_Mode,
    Pure
 is
@@ -143,4 +143,4 @@ private
    function Shift_Right (Value : T; Amount : Natural) return T
       with Import, Convention => Intrinsic;
 
-end AES;
+end Tiny.AES;

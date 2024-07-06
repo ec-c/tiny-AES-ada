@@ -1,4 +1,4 @@
-package body AES is
+package body Tiny.AES is
 
    package body ECB is
 
@@ -220,4 +220,4 @@ package body AES is
       return Result;
    end Add_Round_Key;
 
-end AES;
+end Tiny.AES;
