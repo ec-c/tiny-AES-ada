@@ -1,12 +1,10 @@
-with "ahven-2.8/gnat/ahven.gpr";
+with "../ahven-2.8/gnat/ahven.gpr";
 
 project Tiny_AES_Ada is
    Ada_Compiler_Switches := External_As_List ("ADAFLAGS", " ");
    Ada_Compiler_Switches := Ada_Compiler_Switches & (
-      "-Og" -- Optimize for debug
-      ,"-ffunction-sections" -- Separate ELF section for each function
+      "-ffunction-sections" -- Separate ELF section for each function
       ,"-fdata-sections" -- Separate ELF section for each variable
-      ,"-g" -- Generate debug info
       ,"-gnatwa" -- Enable all warnings
       ,"-gnatw.X" -- Disable warnings for No_Exception_Propagation
       ,"-gnatVa" -- All validity checks
@@ -36,8 +34,8 @@ project Tiny_AES_Ada is
       ,"-gnatW8" -- UTF-8 encoding for wide characters
    );
 
-   type Build_Profile_Kind is ("release", "validation", "development");
-   Build_Profile : Build_Profile_Kind := "development";
+   type Build_Profile_Kind is ("debug", "optimize");
+   Build_Profile : Build_Profile_Kind := "debug";
 
    for Exec_Dir use ".";
    for Main use ("tester.adb");
@@ -46,16 +44,25 @@ project Tiny_AES_Ada is
 
    for Create_Missing_Dirs use "True";
 
+   Build_Switches := ();
+   case Build_Profile is
+      when "debug" => Build_Switches :=
+        ("-g" -- Generate debug info
+         ,"-Og"); -- Optimize for debug
+      when "optimize" => Build_Switches :=
+        ("-O3" -- Optimization
+         ,"-gnatn"); -- Enable inlining
+   end case;
+
    package Compiler is
-      for Default_Switches ("Ada") use Ada_Compiler_Switches & ("-gnat2022");
+      for Default_Switches ("Ada") use
+         Ada_Compiler_Switches &
+         Build_Switches &
+        ("-gnat2022");
    end Compiler;
 
    package Binder is
       for Switches ("Ada") use ("-Es"); -- Symbolic traceback
    end Binder;
-
-   package Install is
-      for Artifacts (".") use ("share");
-   end Install;
 
 end Tiny_AES_Ada;
