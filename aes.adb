@@ -8,7 +8,7 @@ package body AES is
          This.Round_Keys := Key_Expansion (Key);
       end Initialize;
 
-      function Encrypt (This : in out Buffer; Data : T_Array) return T_Array is
+      function Encrypt (This : in out Buffer; Data : Block128) return Block128 is
          State : constant Word_Array :=
            [1 => [Data (1),  Data (2),  Data (3),  Data (4)],
             2 => [Data (5),  Data (6),  Data (7),  Data (8)],
@@ -32,12 +32,12 @@ package body AES is
 
       function Xcrypt
         (This    : in out Buffer;
-         Data    : T_Array;
+         Data    : Block128;
          Counter : Counter_T)
-      return T_Array is
+      return Block128 is
          package AES128_ECB is new ECB (Key);
          Buffer    : AES128_ECB.Buffer;
-         Keystream : constant T_Array := Buffer.Encrypt (Nonce + Counter);
+         Keystream : constant Block128 := Buffer.Encrypt (Nonce + Counter);
       begin
          return [Data (1)  xor Keystream (1),
                  Data (2)  xor Keystream (2),
@@ -61,7 +61,7 @@ package body AES is
 
    --  This function creates ten incremental round keys.
    --  The round keys are used in each round to en-/decrypt the states.
-   function Key_Expansion (Key : T_Array) return Round_Key_Array is
+   function Key_Expansion (Key : Block128) return Round_Key_Array is
       Result : Round_Key_Array :=
         --  Initialise the first round by using the key itself.
         [0 => [1 => [Key (1),  Key (2),  Key (3),  Key (4)],

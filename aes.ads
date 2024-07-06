@@ -13,6 +13,10 @@ package AES with
    SPARK_Mode,
    Pure
 is
+
+   --  The key, nonce and input are each 128 bits long.
+   subtype Block128 is T_Array (1 .. 16);
+
    type Round_Key_Array is private;
    type Word_Array is private;
 
@@ -20,7 +24,7 @@ is
    --  ECB  --
    -----------
    generic
-      Key : T_Array;
+      Key : Block128;
    package ECB with
       SPARK_Mode
    is
@@ -29,7 +33,7 @@ is
       overriding
       procedure Initialize (This : in out Buffer);
 
-      function Encrypt (This : in out Buffer; Data : T_Array) return T_Array;
+      function Encrypt (This : in out Buffer; Data : Block128) return Block128;
 
    private
 
@@ -45,8 +49,8 @@ is
    -----------
    generic
       type Counter_T is mod <>;
-      with function "+" (Nonce : T_Array; Value : Counter_T) return T_Array;
-      Key, Nonce : T_Array;
+      with function "+" (Nonce : Block128; Value : Counter_T) return Block128;
+      Key, Nonce : Block128;
    package CTR with
       SPARK_Mode
    is
@@ -56,9 +60,9 @@ is
 
       function Xcrypt
         (This   : in out Buffer;
-        Data    : T_Array;
+        Data    : Block128;
         Counter : Counter_T)
-      return T_Array;
+      return Block128;
 
    private
 
@@ -115,7 +119,7 @@ private
      [16#01#, 16#02#, 16#04#, 16#08#, 16#10#,
       16#20#, 16#40#, 16#80#, 16#1b#, 16#36#];
 
-   function Key_Expansion (Key : T_Array) return Round_Key_Array;
+   function Key_Expansion (Key : Block128) return Round_Key_Array;
 
    function Cipher
      (State : Word_Array;
