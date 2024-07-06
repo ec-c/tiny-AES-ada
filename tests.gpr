@@ -1,6 +1,6 @@
 with "../ahven-2.8/gnat/ahven.gpr";
 
-project Tiny_AES_Ada is
+project Tests is
    Ada_Compiler_Switches := External_As_List ("ADAFLAGS", " ");
    Ada_Compiler_Switches := Ada_Compiler_Switches & (
       "-ffunction-sections" -- Separate ELF section for each function
@@ -65,4 +65,4 @@ project Tiny_AES_Ada is
       for Switches ("Ada") use ("-Es"); -- Symbolic traceback
    end Binder;
 
-end Tiny_AES_Ada;
+end Tests;
