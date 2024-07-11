@@ -39,22 +39,7 @@ package body Tiny.AES is
          Buffer    : AES128_ECB.Buffer;
          Keystream : constant Block128 := Buffer.Encrypt (Nonce + Counter);
       begin
-         return [Data (1)  xor Keystream (1),
-                 Data (2)  xor Keystream (2),
-                 Data (3)  xor Keystream (3),
-                 Data (4)  xor Keystream (4),
-                 Data (5)  xor Keystream (5),
-                 Data (6)  xor Keystream (6),
-                 Data (7)  xor Keystream (7),
-                 Data (8)  xor Keystream (8),
-                 Data (9)  xor Keystream (9),
-                 Data (10) xor Keystream (10),
-                 Data (11) xor Keystream (11),
-                 Data (12) xor Keystream (12),
-                 Data (13) xor Keystream (13),
-                 Data (14) xor Keystream (14),
-                 Data (15) xor Keystream (15),
-                 Data (16) xor Keystream (16)];
+         return [for I in 1 .. 16 => Data (I) xor Keystream (I)];
       end Xcrypt;
 
    end CTR;
