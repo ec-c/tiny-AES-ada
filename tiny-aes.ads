@@ -10,8 +10,9 @@ generic
    type T_Index is range <>;
    type T_Array is array (T_Index range <>) of T;
 package Tiny.AES with
-   SPARK_Mode,
-   Pure
+   Preelaborate,
+   Pure,
+   SPARK_Mode
 is
 
    --  The key, nonce and input are each 128 bits long.
