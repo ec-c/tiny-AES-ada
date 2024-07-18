@@ -6,10 +6,10 @@ package Test_AES is
 
    type Test_T is new Ahven.Framework.Test_Case with null record;
 
-   subtype u8 is Interfaces.Unsigned_8 range Interfaces.Unsigned_8'Range;
-   subtype u64 is Interfaces.Unsigned_64 range Interfaces.Unsigned_64'Range;
-
+   type u8 is new Interfaces.Unsigned_8 range Interfaces.Unsigned_8'Range;
    type Bytes is array (Positive range <>) of aliased u8;
+
+   type u64 is new Interfaces.Unsigned_64 range Interfaces.Unsigned_64'Range;
 
    overriding
    procedure Initialize (Test : in out Test_T);

@@ -10,10 +10,10 @@ package body Tiny.AES is
 
       function Encrypt (This : in out Buffer; Data : Block128) return Block128 is
          State : constant Word_Array :=
-           [1 => [Data (1),  Data (2),  Data (3),  Data (4)],
-            2 => [Data (5),  Data (6),  Data (7),  Data (8)],
-            3 => [Data (9),  Data (10), Data (11), Data (12)],
-            4 => [Data (13), Data (14), Data (15), Data (16)]];
+           [[Data (1),  Data (2),  Data (3),  Data (4)],
+            [Data (5),  Data (6),  Data (7),  Data (8)],
+            [Data (9),  Data (10), Data (11), Data (12)],
+            [Data (13), Data (14), Data (15), Data (16)]];
          Result : Word_Array;
       begin
          Result := Cipher (State, This.Round_Keys);
@@ -49,10 +49,10 @@ package body Tiny.AES is
    function Key_Expansion (Key : Block128) return Round_Key_Array is
       Result : Round_Key_Array :=
         --  Initialise the first round by using the key itself.
-        [0 => [1 => [Key (1),  Key (2),  Key (3),  Key (4)],
-               2 => [Key (5),  Key (6),  Key (7),  Key (8)],
-               3 => [Key (9),  Key (10), Key (11), Key (12)],
-               4 => [Key (13), Key (14), Key (15), Key (16)]],
+        [0 => [[Key (1),  Key (2),  Key (3),  Key (4)],
+               [Key (5),  Key (6),  Key (7),  Key (8)],
+               [Key (9),  Key (10), Key (11), Key (12)],
+               [Key (13), Key (14), Key (15), Key (16)]],
          1 .. 10 => [1 .. 4 => [1 .. 4 => 0]]];
    begin
       --  All other round keys are found from the previous round keys.
@@ -98,10 +98,10 @@ package body Tiny.AES is
       function Get_Round_Key (R : Natural) return Word_Array is
          K : constant Round_Key_Array := Round_Keys;
       begin
-         return [1 => [K (R, 1, 1), K (R, 1, 2), K (R, 1, 3), K (R, 1, 4)],
-                 2 => [K (R, 2, 1), K (R, 2, 2), K (R, 2, 3), K (R, 2, 4)],
-                 3 => [K (R, 3, 1), K (R, 3, 2), K (R, 3, 3), K (R, 3, 4)],
-                 4 => [K (R, 4, 1), K (R, 4, 2), K (R, 4, 3), K (R, 4, 4)]];
+         return [[K (R, 1, 1), K (R, 1, 2), K (R, 1, 3), K (R, 1, 4)],
+                 [K (R, 2, 1), K (R, 2, 2), K (R, 2, 3), K (R, 2, 4)],
+                 [K (R, 3, 1), K (R, 3, 2), K (R, 3, 3), K (R, 3, 4)],
+                 [K (R, 4, 1), K (R, 4, 2), K (R, 4, 3), K (R, 4, 4)]];
       end Get_Round_Key;
       pragma Inline (Get_Round_Key);
 
@@ -145,10 +145,10 @@ package body Tiny.AES is
    --  The Permute function shifts the rows to the left and transposes the matrix.
    function Permute (State : Word_Array) return Word_Array is
    begin
-      return [1 => [State (1, 1), State (2, 2), State (3, 3), State (4, 4)],
-              2 => [State (2, 1), State (3, 2), State (4, 3), State (1, 4)],
-              3 => [State (3, 1), State (4, 2), State (1, 3), State (2, 4)],
-              4 => [State (4, 1), State (1, 2), State (2, 3), State (3, 4)]];
+      return [[State (1, 1), State (2, 2), State (3, 3), State (4, 4)],
+              [State (2, 1), State (3, 2), State (4, 3), State (1, 4)],
+              [State (3, 1), State (4, 2), State (1, 3), State (2, 4)],
+              [State (4, 1), State (1, 2), State (2, 3), State (3, 4)]];
    end Permute;
 
    --  The Multiplicate functions mixes the rows of the transposed matrix (-> columns).

@@ -48,8 +48,6 @@ package body Test_AES is
    package AES128 is new Tiny.AES (u8, Positive, Bytes);
 
    function Increment (Nonce : Bytes; Value : u64) return Bytes is
-      use type u64;
-
       Result : Bytes := Nonce;
       Amount : u64 := Value;
    begin
