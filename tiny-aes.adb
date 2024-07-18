@@ -57,6 +57,8 @@ package body Tiny.AES is
    begin
       --  All other round keys are found from the previous round keys.
       for I in 1 .. Round_Key_Array'Last (1) loop
+         pragma Loop_Optimize (Ivdep, Unroll);
+
          --  Word 1
          Result (I, 1, 1) := Result (I - 1, 1, 1) xor
             --  RotWord -> SubWord (using Sbox) -> Rcon
