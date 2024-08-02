@@ -34,7 +34,7 @@ is
       overriding
       procedure Initialize (This : in out Buffer);
 
-      function Encrypt (This : in out Buffer; Data : Block128) return Block128;
+      function Encrypt (This : Buffer; Data : Block128) return Block128;
 
    private
 
@@ -60,7 +60,7 @@ is
       type Buffer is tagged limited private;
 
       function Xcrypt
-        (This   : in out Buffer;
+        (This   : Buffer;
         Data    : Block128;
         Counter : Counter_T)
       return Block128;

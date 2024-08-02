@@ -8,7 +8,7 @@ package body Tiny.AES is
          This.Round_Keys := Key_Expansion (Key);
       end Initialize;
 
-      function Encrypt (This : in out Buffer; Data : Block128) return Block128 is
+      function Encrypt (This : Buffer; Data : Block128) return Block128 is
          State : constant Word_Array :=
            [[Data (1),  Data (2),  Data (3),  Data (4)],
             [Data (5),  Data (6),  Data (7),  Data (8)],
@@ -31,7 +31,7 @@ package body Tiny.AES is
    package body CTR is
 
       function Xcrypt
-        (This    : in out Buffer;
+        (This    : Buffer;
          Data    : Block128;
          Counter : Counter_T)
       return Block128 is
