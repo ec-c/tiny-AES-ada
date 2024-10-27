@@ -1,4 +1,4 @@
-package body Tiny.AES is
+package body Tiny.AES128 is
 
    package body ECB is
 
@@ -9,12 +9,12 @@ package body Tiny.AES is
       end Initialize;
 
       function Encrypt (This : Buffer; Data : Block128) return Block128 is
-         State : constant Word_Array :=
+         State : constant Matrix_T :=
            [[Data (1),  Data (2),  Data (3),  Data (4)],
             [Data (5),  Data (6),  Data (7),  Data (8)],
             [Data (9),  Data (10), Data (11), Data (12)],
             [Data (13), Data (14), Data (15), Data (16)]];
-         Result : Word_Array;
+         Result : Matrix_T;
       begin
          Result := Cipher (State, This.Round_Keys);
 
@@ -62,13 +62,13 @@ package body Tiny.AES is
          --  Word 1
          Result (I, 1, 1) := Result (I - 1, 1, 1) xor
             --  RotWord -> SubWord (using Sbox) -> Rcon
-            Sbox (T_Index'First + T'Pos (Result (I - 1, 4, 2))) xor Rcon (T_Index (I));
+            Sbox (TIndex'First + T'Pos (Result (I - 1, 4, 2))) xor Rcon (TIndex (I));
          Result (I, 1, 2) := Result (I - 1, 1, 2) xor
-            Sbox (T_Index'First + T'Pos (Result (I - 1, 4, 3)));
+            Sbox (TIndex'First + T'Pos (Result (I - 1, 4, 3)));
          Result (I, 1, 3) := Result (I - 1, 1, 3) xor
-            Sbox (T_Index'First + T'Pos (Result (I - 1, 4, 4)));
+            Sbox (TIndex'First + T'Pos (Result (I - 1, 4, 4)));
          Result (I, 1, 4) := Result (I - 1, 1, 4) xor
-            Sbox (T_Index'First + T'Pos (Result (I - 1, 4, 1)));
+            Sbox (TIndex'First + T'Pos (Result (I - 1, 4, 1)));
 
          --  Word 2
          Result (I, 2, 1) := Result (I - 1, 2, 1) xor Result (I, 1, 1);
@@ -94,10 +94,10 @@ package body Tiny.AES is
 
    --  The Cipher function is the main function that encrypts the plaintext.
    function Cipher
-     (State      : Word_Array;
+     (State      : Matrix_T;
       Round_Keys : Round_Key_Array)
-   return Word_Array is
-      function Get_Round_Key (R : Natural) return Word_Array is
+   return Matrix_T is
+      function Get_Round_Key (R : Natural) return Matrix_T is
          K : constant Round_Key_Array := Round_Keys;
       begin
          return [[K (R, 1, 1), K (R, 1, 2), K (R, 1, 3), K (R, 1, 4)],
@@ -107,7 +107,7 @@ package body Tiny.AES is
       end Get_Round_Key;
       pragma Inline (Get_Round_Key);
 
-      Result : Word_Array := State;
+      Result : Matrix_T := State;
    begin
       --  Add the first round key to the state before starting the rounds.
       Result := Add_Round_Key (Result, Get_Round_Key (0));
@@ -130,14 +130,14 @@ package body Tiny.AES is
 
    --  The Substitute function substitutes the values in the state matrix with
    --  values in an S-box.
-   function Substitute (State : Word_Array) return Word_Array is
-      Result : Word_Array;
+   function Substitute (State : Matrix_T) return Matrix_T is
+      Result : Matrix_T;
    begin
-      for I in Word_Array'Range (1) loop
+      for I in Matrix_T'Range (1) loop
          pragma Loop_Optimize (Ivdep, Unroll);
-         for J in Word_Array'Range (2) loop
+         for J in Matrix_T'Range (2) loop
             pragma Loop_Optimize (Ivdep, Unroll);
-            Result (I, J) := Sbox (T_Index'First + T'Pos (State (I, J)));
+            Result (I, J) := Sbox (TIndex'First + T'Pos (State (I, J)));
          end loop;
       end loop;
 
@@ -145,7 +145,7 @@ package body Tiny.AES is
    end Substitute;
 
    --  The Permute function shifts the rows to the left and transposes the matrix.
-   function Permute (State : Word_Array) return Word_Array is
+   function Permute (State : Matrix_T) return Matrix_T is
    begin
       return [[State (1, 1), State (2, 2), State (3, 3), State (4, 4)],
               [State (2, 1), State (3, 2), State (4, 3), State (1, 4)],
@@ -154,15 +154,15 @@ package body Tiny.AES is
    end Permute;
 
    --  The Multiplicate functions mixes the rows of the transposed matrix (-> columns).
-   function Multiplicate (State : Word_Array) return Word_Array is
+   function Multiplicate (State : Matrix_T) return Matrix_T is
       function Xtime (X : T) return T is
          (Shift_Left (X, 1) xor ((Shift_Right (X, 7) and 1) * 16#1b#));
       pragma Inline (Xtime);
 
-      Result : Word_Array := State;
+      Result : Matrix_T := State;
       A, B, C : T;
    begin
-      for I in Word_Array'Range (1) loop
+      for I in Matrix_T'Range (1) loop
          pragma Loop_Optimize (Ivdep, Unroll);
 
          A := Result (I, 1);
@@ -191,14 +191,14 @@ package body Tiny.AES is
    --  The Add_Round_Key function adds the round key to the state.
    --  The round key is added to the state by an xor function.
    function Add_Round_Key
-     (State     : Word_Array;
-      Round_Key : Word_Array)
-   return Word_Array is
-      Result : Word_Array;
+     (State     : Matrix_T;
+      Round_Key : Matrix_T)
+   return Matrix_T is
+      Result : Matrix_T;
    begin
-      for I in Word_Array'Range (1) loop
+      for I in Matrix_T'Range (1) loop
          pragma Loop_Optimize (Ivdep, Unroll);
-         for J in Word_Array'Range (2) loop
+         for J in Matrix_T'Range (2) loop
             pragma Loop_Optimize (Ivdep, Unroll);
             Result (I, J) := State (I, J) xor Round_Key (I, J);
          end loop;
@@ -207,4 +207,4 @@ package body Tiny.AES is
       return Result;
    end Add_Round_Key;
 
-end Tiny.AES;
+end Tiny.AES128;

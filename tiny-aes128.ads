@@ -7,19 +7,19 @@ with Ada.Finalization;
 
 generic
    type T is mod <>;
-   type T_Index is range <>;
-   type T_Array is array (T_Index range <>) of T;
-package Tiny.AES with
+   type TIndex is range <>;
+   type TArray is array (TIndex range <>) of T;
+package Tiny.AES128 with
    Preelaborate,
    Pure,
    SPARK_Mode
 is
 
    --  The key, nonce and input are each 128 bits long.
-   subtype Block128 is T_Array (1 .. 16);
+   subtype Block128 is TArray (1 .. 16);
 
    type Round_Key_Array is private;
-   type Word_Array is private;
+   type Matrix_T is private;
 
    -----------
    --  ECB  --
@@ -78,9 +78,9 @@ private
 
    --  AES128 -> 10 rounds * (4 * 4) bytes = 128 bit
    type Round_Key_Array is array (0 .. 10, 1 .. 4, 1 .. 4) of T;
-   type Word_Array is array (1 .. 4, 1 .. 4) of T;
+   type Matrix_T is array (1 .. 4, 1 .. 4) of T;
 
-   Sbox : constant T_Array (1 .. 256) :=
+   Sbox : constant TArray (TIndex'First .. TIndex'First + 255) :=
    --   0/8     1/9     2/a     3/b     4/c     5/d     6/e     7/f
      [16#63#, 16#7c#, 16#77#, 16#7b#, 16#f2#, 16#6b#, 16#6f#, 16#c5#,
       16#30#, 16#01#, 16#67#, 16#2b#, 16#fe#, 16#d7#, 16#ab#, 16#76#,
@@ -115,7 +115,7 @@ private
       16#8c#, 16#a1#, 16#89#, 16#0d#, 16#bf#, 16#e6#, 16#42#, 16#68#,
       16#41#, 16#99#, 16#2d#, 16#0f#, 16#b0#, 16#54#, 16#bb#, 16#16#];
 
-   Rcon : constant T_Array (1 .. 10) :=
+   Rcon : constant TArray (1 .. 10) :=
    --   1/6     2/7     3/8     4/9     5/10
      [16#01#, 16#02#, 16#04#, 16#08#, 16#10#,
       16#20#, 16#40#, 16#80#, 16#1b#, 16#36#];
@@ -123,20 +123,20 @@ private
    function Key_Expansion (Key : Block128) return Round_Key_Array;
 
    function Cipher
-     (State : Word_Array;
+     (State : Matrix_T;
       Round_Keys : Round_Key_Array)
-   return Word_Array;
+   return Matrix_T;
 
-   function Substitute (State : Word_Array) return Word_Array;
+   function Substitute (State : Matrix_T) return Matrix_T;
 
-   function Permute (State : Word_Array) return Word_Array;
+   function Permute (State : Matrix_T) return Matrix_T;
 
-   function Multiplicate (State : Word_Array) return Word_Array;
+   function Multiplicate (State : Matrix_T) return Matrix_T;
 
    function Add_Round_Key
-     (State    : Word_Array;
-     Round_Key : Word_Array)
-   return Word_Array;
+     (State    : Matrix_T;
+     Round_Key : Matrix_T)
+   return Matrix_T;
 
    function Shift_Left (Value : T; Amount : Natural) return T
       with Import, Convention => Intrinsic;
@@ -144,4 +144,4 @@ private
    function Shift_Right (Value : T; Amount : Natural) return T
       with Import, Convention => Intrinsic;
 
-end Tiny.AES;
+end Tiny.AES128;
